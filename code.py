@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-# Created by: ????
-# Created on: ???? 2019
-# This file is the "????" game
-#   for CircuitPython
+# Created by: RJ Fromm
+# Created on: Dec 2019
+# This is the main file for Snakob's forest for CircuitPython
 
 import ugame
 import stage
