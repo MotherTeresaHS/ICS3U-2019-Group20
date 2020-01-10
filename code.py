@@ -197,10 +197,6 @@ def main_menu_scene():
         game.render_block()
 
 
-            
-        
-            
-            
 
 
     while True:
