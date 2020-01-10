@@ -100,7 +100,6 @@ def mt_splash_scene():
     text.append(text1)
 
     text2 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
-
     text2.move(30, 110)
     text2.text("In association")
     text.append(text2)
@@ -109,7 +108,6 @@ def mt_splash_scene():
     text3.move(5, 120)
     text3.text("with Snakob studios")
     text.append(text3)
-
 
     # get sound ready
     # follow this guide to convert your other sounds to something that will work
@@ -144,9 +142,6 @@ def mt_splash_scene():
         # redraw sprite list
 
 def game_splash_scene():
-
-    # this function is the MT splash scene
-
     
     # repeat forever, game loop
     while True:
@@ -154,12 +149,9 @@ def game_splash_scene():
 
         # update game logic
 
-        # Wait for 1 seconds
-        time.sleep(1.0)
-        main_menu_scene()
-
         # redraw sprite list
-    # this function is the game scene
+        pass # just a placeholder until you write the code
+
 
 def main_menu_scene():
     # this function is the Main menu
@@ -173,8 +165,6 @@ def main_menu_scene():
     sprites = []
 
     background.tile(2, 2, 0)
-
-
 
     # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
     top_right_of_tree = stage.Sprite(image_bank_3, 13, 65, 116)
@@ -218,6 +208,7 @@ def main_menu_scene():
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
+    
    
     stars = []
     while True: 
@@ -229,21 +220,34 @@ def main_menu_scene():
             
         game.layers = text + sprites + stars + [background]
         game.render_block()
-
-
-
-
-    while True:
-        # get user input
-
+        
         # update game logic
-
-        # redraw sprite list
-        pass # just a placeholder until you write the code
+        keys = ugame.buttons.get_pressed()
+        #print(keys)
+        if keys & ugame.K_START != 0:  # Start button
+            game_scene()
+            #break
 
 
 def game_scene():
     # this function is the game scene
+    image_bank_4 = stage.Bank.from_bmp16("SPRITES.bmp")
+    # sets the background to image 0 in the bank
+    background = stage.Grid(image_bank_4, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
+    for x_location in range(constants.SCREEN_GRID_X):
+        for y_location in range(constants.SCREEN_GRID_Y):
+            tile_picked = random.randint(13, 15)
+            background.tile(x_location, y_location, tile_picked)
+            
+    # create a stage for the background to show up on
+    #   and set the frame rate to 60fps
+    game = stage.Stage(ugame.display, 60)
+    # set the layers, items show up in order
+    game.layers = [background]
+    # render the background and inital location of sprite list
+    # most likely you will only render background once per scene
+    game.render_block()
+    
 
     # repeat forever, game loop
     while True:
