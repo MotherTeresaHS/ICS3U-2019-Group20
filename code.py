@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+##!/usr/bin/env python3
 
-# Created by: RJ Fromm
+# Created by: Cameron and RJ 
 # Created on: Dec 2019
 # This is the main file for Snakob's forest for CircuitPython
 
@@ -10,7 +10,6 @@ import board
 import neopixel
 import time
 import random
-
 import constants
 
 
@@ -66,14 +65,33 @@ def mt_splash_scene():
 
     # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
     background.tile(2, 2, 0)  # blank white
-    background.tile(3, 2, 0)
-    background.tile(4, 2, 0)
-    background.tile(5, 2, 0)
-    background.tile(6, 2, 0)
+    background.tile(3, 2, 1)
+    background.tile(4, 2, 2)
+    background.tile(5, 2, 3)
+    background.tile(6, 2, 4)
     background.tile(7, 2, 0)  # blank white
 
-   
+    background.tile(2, 3, 0)  # blank white
+    background.tile(3, 3, 5)
+    background.tile(4, 3, 6)
+    background.tile(5, 3, 7)
+    background.tile(6, 3, 8)
+    background.tile(7, 3, 0)  # blank white
 
+    background.tile(2, 4, 0)  # blank white
+    background.tile(3, 4, 9)
+    background.tile(4, 4, 10)
+    background.tile(5, 4, 11)
+    background.tile(6, 4, 12)
+    background.tile(7, 4, 0)  # blank white
+
+    background.tile(2, 5, 0)  # blank white
+    background.tile(3, 5, 0)
+    background.tile(4, 5, 13)
+    background.tile(5, 5, 14)
+    background.tile(6, 5, 0)
+    background.tile(7, 5, 0)  # blank white
+    
     text = []
 
     text1 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
@@ -95,6 +113,8 @@ def mt_splash_scene():
     sound.mute(False)
     sound.play(coin_sound)
 
+
+
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
@@ -112,7 +132,7 @@ def mt_splash_scene():
 
         # Wait for 1 seconds
         time.sleep(1.0)
-        game_splash_scene()
+        main_menu_scene()
 
         # redraw sprite list
 
@@ -227,45 +247,61 @@ def main_menu_scene():
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
 
-    # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
-    top_right_of_tree = stage.Sprite(image_bank_3 0, 16, 0)
-    sprites.append(top_right_of_tree)
-    top_middle_of_tree = stage.Sprite(image_bank_3 1, 16, 16)
-    sprites.append(top_middle_of_tree)
-    top_of_tree = stage.Sprite(image_bank_3 2, 16, 32)
-    sprites.append(top_of_tree)
-    top_left_of_tree = stage.Sprite(image_bank_3 3, 32, 0)
-    sprites.append(top_left_of_tree)
-    middle_right_of_tree = stage.Sprite(image_bank_3 4, 32, 16)
-    sprites.append(middle_right_of_tree)
-    middle_of_tree = stage.Sprite(image_bank_3 5, 32, 32)
-    sprites.append(middle_of_tree)
-    middle_left_of_tree = stage.Sprite(image_bank_3 6, 48, 0)
-    sprites.append(middle_left_of_tree)
-    bottem_right_of_tree = stage.Sprite(image_bank_3 7, 48, 16)
-    sprites.append(bottem_right_of_tree)
-    bottem_midle_of_tree = stage.Sprite(image_bank_3 8, 48, 32)
-    sprites.append(bottem_midle_of_tree)
-    bottem_left_of_tree = stage.Sprite(image_bank_3 9, 64, 0)
-    sprites.append(bottem_left_of_tree)
-    verybottem_right_of_tree = stage.Sprite(image_bank_3 10, 64, 16)
-    sprites.append(verybottem_right_of_tree)
-    verybottem_middle_of_tree = stage.Sprite(image_bank_3 11, 64, 32)
-    sprites.append(verybottem_middle_of_tree)
-    verybottem_left_of_tree = stage.Sprite(image_bank_3 12, 16, 0)
-    sprites.append(verybottem_left_of_tree)
-    final_of_tree = stage.Sprite(image_bank_3 13, 16, 0)
-    sprites.append(final_of_tree)
- 
+    sprites = []
 
+    background.tile(2, 2, 0)
+
+
+
+    # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
+    top_right_of_tree = stage.Sprite(image_bank_3, 13, 65, 116)
+    sprites.append(top_right_of_tree)
+    top_middle_of_tree = stage.Sprite(image_bank_3, 14, 81, 116)
+    sprites.append(top_middle_of_tree)
+    top_of_tree = stage.Sprite(image_bank_3, 9, 65, 100)
+    sprites.append(top_of_tree)
+    top_left_of_tree = stage.Sprite(image_bank_3, 10, 81, 100)
+    sprites.append(top_left_of_tree)
+    middle_right_of_tree = stage.Sprite(image_bank_3, 5, 65, 84)
+    sprites.append(middle_right_of_tree)
+    middle_of_tree = stage.Sprite(image_bank_3, 6, 81, 84)
+    sprites.append(middle_of_tree)
+    middle_left_of_tree = stage.Sprite(image_bank_3, 4, 49, 84)
+    sprites.append(middle_left_of_tree)
+    bottem_right_of_tree = stage.Sprite(image_bank_3, 7, 97, 84)
+    sprites.append(bottem_right_of_tree)
+    bottem_midle_of_tree = stage.Sprite(image_bank_3, 1, 65, 68)
+    sprites.append(bottem_midle_of_tree)
+    bottem_left_of_tree = stage.Sprite(image_bank_3, 3, 81, 68)
+    sprites.append(bottem_left_of_tree)
+    verybottem_right_of_tree = stage.Sprite(image_bank_3, 2, 97, 68)
+    sprites.append(verybottem_right_of_tree)
+    verybottem_middle_of_tree = stage.Sprite(image_bank_3, 11, 97, 100)
+    sprites.append(verybottem_middle_of_tree)
+    
+    text = []
+    
+    text1 = stage.Text(width=29, height=14, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
+    text1.move(35, 40)
+    text1.text("PRESS START")
+    text.append(text1)
+    
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
-    # set the layers, items show up in order
-    game.layers = sprites + [background]
-    # render the background and inital location of sprite list
-    # most likely you will only render background once per scene
-    game.render_block()
+   
+    stars = []
+    while True: 
+        time.sleep(1.0)
+        stars = []
+        for cloud_number in range(constants.STAR_NUMBER):
+            star = stage.Sprite(image_bank_3, 15, random.randint(0, 160),random.randint(0, 128))
+            stars.append(star)
+            
+        game.layers = text + sprites + stars + [background]
+        game.render_block()
+
+
 
 
     while True:
@@ -296,11 +332,11 @@ def game_over_scene(final_score):
     # repeat forever, game loop
     while True:
         # get user input
-
         # update game logic
 
         # redraw sprite list
         pass # just a placeholder until you write the code
+
 
 
 if __name__ == "__main__":
