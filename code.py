@@ -1,6 +1,6 @@
 ##!/usr/bin/env python3
 
-# Created by: RJ Fromm
+# Created by: Cameron and RJ 
 # Created on: Dec 2019
 # This is the main file for Snakob's forest for CircuitPython
 
@@ -231,6 +231,7 @@ def game_over_scene(final_score):
 
         # redraw sprite list
         pass # just a placeholder until you write the code
+
 
 
 if __name__ == "__main__":
