@@ -1,4 +1,4 @@
-##!/usr/bin/env python3
+#!/usr/bin/env python3
 
 # Created by: Cameron and RJ 
 # Created on: Dec 2019
@@ -99,6 +99,27 @@ def mt_splash_scene():
     text1.text("MT Game Studios")
     text.append(text1)
 
+    text2 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
+    text2.move(30, 110)
+    text2.text("In association")
+    text.append(text2)
+    
+    text3 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
+    text3.move(5, 120)
+    text3.text("with Snakob studios")
+    text.append(text3)
+
+    # get sound ready
+    # follow this guide to convert your other sounds to something that will work
+    #    https://learn.adafruit.com/microcontroller-compatible-audio-file-conversion
+    coin_sound = open("coin.wav", 'rb')
+    sound = ugame.audio
+    sound.stop()
+    sound.mute(True)
+    sound.play(coin_sound)
+
+
+
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
@@ -121,8 +142,7 @@ def mt_splash_scene():
         # redraw sprite list
 
 def game_splash_scene():
-    # this function is the game scene
-
+    
     # repeat forever, game loop
     while True:
         # get user input
@@ -176,10 +196,16 @@ def main_menu_scene():
     
     text = []
     
-    text1 = stage.Text(width=29, height=14, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
-    text1.move(35, 40)
-    text1.text("PRESS START")
+    text1 = stage.Text(width=50, height=30, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
+    text1.move(23, 30)
+    text1.text("SNAKOB'S FOREST")
     text.append(text1)
+    
+    text2 = stage.Text(width=29, height=14, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
+    text2.move(37, 55)
+    text2.text("PRESS START")
+    text.append(text2)
+    
     
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
