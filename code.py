@@ -7,7 +7,6 @@
 import ugame
 import stage
 import board
-import neopixel
 import time
 import random
 
@@ -20,8 +19,6 @@ def blank_white_reset_scene():
     # do house keeping to ensure everythng is setup
 
     # set up the NeoPixels
-    pixels = neopixel.NeoPixel(board.NEOPIXEL, 5, auto_write=False)
-    pixels.deinit() # and turn them all off
 
     # reset sound to be off
     sound = ugame.audio
@@ -100,18 +97,13 @@ def mt_splash_scene():
     text1.text("MT Game Studios")
     text.append(text1)
 
-    text2 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
-    text2.move(35, 110)
-    text2.text("In association with Snakob studios")
-    text.append(text2)
-
     # get sound ready
     # follow this guide to convert your other sounds to something that will work
     #    https://learn.adafruit.com/microcontroller-compatible-audio-file-conversion
     coin_sound = open("coin.wav", 'rb')
     sound = ugame.audio
     sound.stop()
-    sound.mute(False)
+    sound.mute(True)
     sound.play(coin_sound)
 
     # create a stage for the background to show up on
@@ -130,125 +122,159 @@ def mt_splash_scene():
         # update game logic
 
         # Wait for 1 seconds
-        time.sleep(1.0)
+        time.sleep(0.01)
         game_splash_scene()
 
         # redraw sprite list
 
 def game_splash_scene():
-    # this function is the game scene
-    def game_splash_scene():
-    # this function is the MT splash scene
+      # this function is the Main menu
 
     # an image bank for CircuitPython
-    image_bank_2 = stage.Bank.from_bmp16("mt_game_studio.bmp")
+    image_bank_3 = stage.Bank.from_bmp16("game_splash_scene.bmp")
 
     # sets the background to image 0 in the bank
-    background = stage.Grid(image_bank_2, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
+    background = stage.Grid(image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
 
-    # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
-    background.tile(2, 2, 0)  # blank white
-    background.tile(3, 2, 1)
-    background.tile(4, 2, 2)
-    background.tile(5, 2, 3)
-    background.tile(6, 2, 4)
-    background.tile(7, 2, 0)  # blank white
+    sprites = []
 
-    background.tile(2, 3, 0)  # blank white
-    background.tile(3, 3, 5)
-    background.tile(4, 3, 6)
-    background.tile(5, 3, 7)
-    background.tile(6, 3, 8)
-    background.tile(7, 3, 0)  # blank white
+    snakob = []
 
-    background.tile(2, 4, 0)  # blank white
-    background.tile(3, 4, 9)
-    background.tile(4, 4, 10)
-    background.tile(5, 4, 11)
-    background.tile(6, 4, 12)
-    background.tile(7, 4, 0)  # blank white
+    background.tile(0, 2, 0)
 
-    background.tile(2, 5, 0)  # blank white
-    background.tile(3, 5, 0)
-    background.tile(4, 5, 13)
-    background.tile(5, 5, 14)
-    background.tile(6, 5, 0)
-    background.tile(7, 5, 0)  # blank white
+    bottom_left = stage.Sprite(image_bank_3, 13, 65, 100)
+    snakob.append(bottom_left)
+
+    mid_tail = stage.Sprite(image_bank_3, 14, 81, 100)
+    snakob.append(mid_tail)
+
+    mid_left_neck = stage.Sprite(image_bank_3, 9, 65, 84)
+    snakob.append(mid_left_neck)
+
+    mid_right_neck = stage.Sprite(image_bank_3, 10, 81, 84)
+    snakob.append(mid_right_neck)
+
+    mid_left_side_face = stage.Sprite(image_bank_3, 5, 65, 68)
+    snakob.append(mid_left_side_face)
+
+    right_eye = stage.Sprite(image_bank_3, 6, 81, 68)
+    snakob.append(right_eye)
+
+    left_side_face = stage.Sprite(image_bank_3, 4, 49, 68)
+    snakob.append(left_side_face)
+
+    end_of_tongue = stage.Sprite(image_bank_3, 7, 97, 68)
+    snakob.append(end_of_tongue)
+
+    top_of_left_eye = stage.Sprite(image_bank_3, 1, 65, 52)
+    snakob.append(top_of_left_eye)
+
+    end_of_tail = stage.Sprite(image_bank_3, 3, 97, 52)
+    snakob.append(end_of_tail)
+
+    left_eyebrow = stage.Sprite(image_bank_3, 2, 81, 52)
+    snakob.append(left_eyebrow)
+    
+    bulky_part_tail = stage.Sprite(image_bank_3, 8, 49, 84)
+    snakob.append(bulky_part_tail)
+    
+    lower_tail = stage.Sprite(image_bank_3, 12, 49, 100)
+    snakob.append(lower_tail)
+    
+    snake15 = stage.Sprite(image_bank_3, 15, 96, 100)
+    snakob.append(snake15)
 
     text = []
 
-    text1 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
-    text1.move(20, 10)
-    text1.text("MT Game Studios")
+    text1 = stage.Text(width=200, height=200, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
+    text1.move(30, 40)
+    text1.text("SNAKOB STUDIOS")
     text.append(text1)
+    
+    stars = []
+    while True:
+        time.sleep(1.0)
+        stars = []
+        for cloud_number in range(constants.STAR_NUMBER):
+            star = stage.Sprite(image_bank_3, 15, random.randint(0, 160),random.randint(0, 128))
+            stars.append(star)
 
-    text2 = stage.Text(width=20, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
-    text2.move(20, 116)
-    text2.text("& Snakob Studios")
-    text.append(text2)
+    game = stage.Stage(ugame.display, 60)
 
-    # get sound ready
-    # follow this guide to convert your other sounds to something that will work
-    #    https://learn.adafruit.com/microcontroller-compatible-audio-file-conversion
-    coin_sound = open("coin.wav", 'rb')
-    sound = ugame.audio
-    sound.stop()
-    sound.mute(False)
-    sound.play(coin_sound)
+    game.layers = text + snakob + [background]
+
+    game.render_block()
+    while True:
+        # get user input
+        # update game logic
+        time.sleep(100.0)
+        main_menu_scene()
+        # redraw sprite list
+        game.render_sprites(snakob)
+        game.tick()
+
+
+def main_menu_scene():
+      # this function is the Main menu
+
+    # an image bank for CircuitPython
+    image_bank_3 = stage.Bank.from_bmp16("tree.bmp")
+
+    # sets the background to image 0 in the bank
+    background = stage.Grid(image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
+
+    sprites = []
+
+    background.tile(2, 2, 0)
+
+
+    # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
+    top_right_of_tree = stage.Sprite(image_bank_3, 13, 65, 116)
+    sprites.append(top_right_of_tree)
+    top_middle_of_tree = stage.Sprite(image_bank_3, 14, 81, 116)
+    sprites.append(top_middle_of_tree)
+    top_of_tree = stage.Sprite(image_bank_3, 9, 65, 100)
+    sprites.append(top_of_tree)
+    top_left_of_tree = stage.Sprite(image_bank_3, 10, 81, 100)
+    sprites.append(top_left_of_tree)
+    middle_right_of_tree = stage.Sprite(image_bank_3, 5, 65, 84)
+    sprites.append(middle_right_of_tree)
+    middle_of_tree = stage.Sprite(image_bank_3, 6, 81, 84)
+    sprites.append(middle_of_tree)
+    middle_left_of_tree = stage.Sprite(image_bank_3, 4, 49, 84)
+    sprites.append(middle_left_of_tree)
+    bottem_right_of_tree = stage.Sprite(image_bank_3, 7, 97, 84)
+    sprites.append(bottem_right_of_tree)
+    bottem_midle_of_tree = stage.Sprite(image_bank_3, 1, 65, 68)
+    sprites.append(bottem_midle_of_tree)
+    bottem_left_of_tree = stage.Sprite(image_bank_3, 3, 81, 68)
+    sprites.append(bottem_left_of_tree)
+    verybottem_right_of_tree = stage.Sprite(image_bank_3, 2, 97, 68)
+    sprites.append(verybottem_right_of_tree)
+    verybottem_middle_of_tree = stage.Sprite(image_bank_3, 11, 97, 100)
+    sprites.append(verybottem_middle_of_tree)
+
+    text = []
+
+    text1 = stage.Text(width=29, height=14, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
+    text1.move(35, 40)
+    text1.text("PRESS START")
+    text.append(text1)
 
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
-    # set the layers, items show up in order
-    game.layers = text + [background]
-    # render the background and inital location of sprite list
-    # most likely you will only render background once per scene
-    game.render_block()
 
-    # repeat forever, game loop
+    stars = []
     while True:
-        # get user input
-
-        # update game logic
-
-        # Wait for 1 seconds
         time.sleep(1.0)
-        main_menu_scene()
+        stars = []
+        for cloud_number in range(constants.STAR_NUMBER):
+            star = stage.Sprite(image_bank_3, 15, random.randint(0, 160),random.randint(0, 128))
+            stars.append(star)
 
-        # redraw sprite list
-    # this function is the game scene
-
-    # repeat forever, game loop
-    while True:
-        # get user input
-
-        # update game logic
-
-        # redraw sprite list
-        pass # just a placeholder until you write the code
-
-    # repeat forever, game loop
-    while True:
-        # get user input
-
-        # update game logic
-
-        # redraw sprite list
-        pass # just a placeholder until you write the code
-
-
-def main_menu_scene():
-    # this function is the game scene
-
-    # repeat forever, game loop
-    while True:
-        # get user input
-
-        # update game logic
-
-        # redraw sprite list
-        pass # just a placeholder until you write the code
-
+        game.layers = text + sprites + stars + [background]
+        game.render_block()
 
 def game_scene():
     # this function is the game scene
