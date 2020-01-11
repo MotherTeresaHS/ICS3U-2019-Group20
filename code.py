@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+##!/usr/bin/env python3
 
-# Created by: RJ Fromm
+# Created by: Cameron and RJ 
 # Created on: Dec 2019
 # This is the main file for Snakob's forest for CircuitPython
 
@@ -9,7 +9,6 @@ import stage
 import board
 import time
 import random
-
 import constants
 
 
@@ -89,7 +88,7 @@ def mt_splash_scene():
     background.tile(5, 5, 14)
     background.tile(6, 5, 0)
     background.tile(7, 5, 0)  # blank white
-
+    
     text = []
 
     text1 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
@@ -106,6 +105,8 @@ def mt_splash_scene():
     sound.mute(True)
     sound.play(coin_sound)
 
+
+
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
@@ -121,9 +122,13 @@ def mt_splash_scene():
 
         # update game logic
 
+<<<<<<< HEAD
         # Wait for 1 seconds
         time.sleep(3.0)
         game_splash_scene()
+=======
+        # Wait for 1 second
+>>>>>>> 775f347ee2350ef2f9ab3ff8295ea19f1f97fd2f
 
         # redraw sprite list
 
@@ -216,10 +221,7 @@ def game_splash_scene():
 
 
 def main_menu_scene():
-      # this function is the Main menu
 
-    # an image bank for CircuitPython
-    image_bank_3 = stage.Bank.from_bmp16("tree.bmp")
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
@@ -548,7 +550,6 @@ def game_over_scene(final_score):
     # repeat forever, game loop
     while True:
         # get user input
-
         # update game logic
         keys = ugame.buttons.get_pressed()
         #print(keys)
@@ -560,5 +561,10 @@ def game_over_scene(final_score):
 
         # redraw sprite list
 
+
 if __name__ == "__main__":
+<<<<<<< HEAD
     mt_splash_scene()
+=======
+    blank_white_reset_scene()
+>>>>>>> 775f347ee2350ef2f9ab3ff8295ea19f1f97fd2f
