@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+##!/usr/bin/env python3
 
-# Created by: RJ Fromm
+# Created by: Cameron and RJ 
 # Created on: Dec 2019
 # This is the main file for Snakob's forest for CircuitPython
 
@@ -9,7 +9,6 @@ import stage
 import board
 import time
 import random
-
 import constants
 
 
@@ -89,7 +88,7 @@ def mt_splash_scene():
     background.tile(5, 5, 14)
     background.tile(6, 5, 0)
     background.tile(7, 5, 0)  # blank white
-
+    
     text = []
 
     text1 = stage.Text(width=29, height=14, font=None, palette=constants.MT_GAME_STUDIO_PALETTE, buffer=None)
@@ -106,6 +105,8 @@ def mt_splash_scene():
     sound.mute(True)
     sound.play(coin_sound)
 
+
+
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
@@ -121,9 +122,7 @@ def mt_splash_scene():
 
         # update game logic
 
-        # Wait for 1 seconds
-        time.sleep(0.01)
-        game_splash_scene()
+        # Wait for 1 second
 
         # redraw sprite list
 
@@ -215,10 +214,7 @@ def game_splash_scene():
 
 
 def main_menu_scene():
-      # this function is the Main menu
 
-    # an image bank for CircuitPython
-    image_bank_3 = stage.Bank.from_bmp16("tree.bmp")
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
@@ -295,11 +291,11 @@ def game_over_scene(final_score):
     # repeat forever, game loop
     while True:
         # get user input
-
         # update game logic
 
         # redraw sprite list
         pass # just a placeholder until you write the code
+
 
 
 if __name__ == "__main__":
