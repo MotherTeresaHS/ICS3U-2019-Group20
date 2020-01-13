@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Created by: Cameron and RJ
+# Created by: Mr. Coxall
 # Created on: October 2019
 # This constants file is CircuitPython Stage game
 
@@ -13,12 +13,20 @@ SPRITE_SIZE = 16
 OFF_TOP_SCREEN = -1 * SPRITE_SIZE
 OFF_BOTTOM_SCREEN = SCREEN_Y + SPRITE_SIZE
 STAR_NUMBER = 20
-
+BLINK_TIMES = 1 
+TOTAL_NUMBER_OF_ROCKS = 5
+OFF_SCREEN_X = -100
+OFF_SCREEN_Y = -100
+TOTAL_NUMBER_OF_SNAKES = 1
+SNAKE_SPEED = 2
+SNAKOB_SPEED = 2
 MT_GAME_STUDIO_PALETTE = (b'\xf8\x1f\x00\x00\xcey\x00\xff\xf8\x1f\xff\x19\xfc\xe0\xfd\xe0'
        b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')
-       
-CUSTOM_PALETTE = (b'\xf8\x1f\x00\x00\xcey\x00\xff\xf2\x1f\xff\x19\xfc\xe0\xfd\xe0'
+
+CUSTOM_PALETTE = (b'\xf8\x1f\x00\x00\xcey\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
        b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')
+       
+BLANK_PALETTE = (b'')
 
 SCORE_PALETTE = (b'\xf8\x1f\x00\x00\xcey\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
        b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')
