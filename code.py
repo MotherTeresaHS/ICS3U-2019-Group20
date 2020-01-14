@@ -1,4 +1,4 @@
-##!/usr/bin/env python3
+#!/usr/bin/env python3
 
 # Created by: Cameron and RJ
 # Created on: Dec 2019
@@ -121,16 +121,23 @@ def mt_splash_scene():
         # get user input
 
         # update game logic
+<<<<<<< HEAD
         # Wait for 1 seconds
         time.sleep(3.0)
         game_splash_scene()
         # Wait for 1 second
 
+=======
+
+        # Wait for 3 seconds
+        time.sleep(3.0)
+        game_splash_scene()
+>>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
 
         # redraw sprite list
 
 def game_splash_scene():
-      # this function is the Main menu
+    # this function is the Main menu
 
     # an image bank for CircuitPython
     image_bank_3 = stage.Bank.from_bmp16("game_splash_scene.bmp")
@@ -207,6 +214,8 @@ def game_splash_scene():
     game.layers = text + snakob + [background]
 
     game.render_block()
+    
+    # repeat forever, game loop
     while True:
         # get user input
         # update game logic
@@ -226,7 +235,6 @@ def main_menu_scene():
     sprites = []
 
     background.tile(2, 2, 0)
-
 
     # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
     top_right_of_tree = stage.Sprite(image_bank_4, 13, 65, 116)
@@ -350,6 +358,7 @@ def game_scene():
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
+
     for x_location in range(constants.SCREEN_GRID_X):
         for y_location in range(constants.SCREEN_GRID_Y):
             boolean = random.randint(0 ,1)
@@ -358,16 +367,25 @@ def game_scene():
             if boolean == 1:
                 tile_picked = 14
             background.tile(x_location, y_location, tile_picked)
+<<<<<<< HEAD
     snake_count = 1
     show_snakes()
+=======
+>>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
+<<<<<<< HEAD
     game.layers = snakob + snakes + swords + sprites + rocks + [background]
+=======
+
+    game.layers = sprites + rocks + snakob + [score_text] + [background]
+>>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
+
 
     # repeat forever, game loop
     while True:
@@ -616,5 +634,9 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main_menu_scene()
     blank_white_reset_scene()
+=======
+    blank_white_reset_scene()
+>>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
