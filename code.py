@@ -337,6 +337,16 @@ def game_scene():
     for snake_number in range(constants.TOTAL_NUMBER_OF_SNAKES):
         a_single_snake = stage.Sprite(image_bank_1, 7, constants.OFF_SCREEN_X, constants.OFF_SCREEN_X)
         snakes.append(a_single_snake)
+    
+    cloud = []
+    a_single_cloud = stage.Sprite(image_bank_1, 11, constants.OFF_SCREEN_X, constants.OFF_SCREEN_X)
+    cloud.append(a_single_cloud)
+    
+    def show_clouds(): 
+        a_single_cloud.move(snakob_bank.x + constants.SNAKOB_SPEED, snakob_bank.y)
+        a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+        
+        
 
     # current number of aliens that should be moving down screen, start with just 1
 
@@ -357,8 +367,7 @@ def game_scene():
     swords.append(swords1_bank) # insert at the top of sprite list
 
     # sets the background to image 0 in the bank
-    background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y) 
-
+    background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
     for x_location in range(constants.SCREEN_GRID_X):
         for y_location in range(constants.SCREEN_GRID_Y):
             boolean = random.randint(0 ,1)
@@ -376,7 +385,8 @@ def game_scene():
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
 
-    game.layers = snakob + snakes + swords + sprites + rocks + [background]
+    game.layers = cloud + snakob + snakes + swords + sprites + rocks + [background]
+
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
@@ -403,7 +413,13 @@ def game_scene():
                 a_button = constants.button_state["button_up"]
 
         # update game logic
-
+        if keys & ugame.K_RIGHT != 0 or keys & ugame.K_LEFT != 0 or keys & ugame.K_DOWN != 0 or keys & ugame.K_UP != 0:
+            a_single_cloud.move((snakob_bank.x - 3) + constants.SNAKOB_SPEED, (snakob_bank.y + 2))
+            
+        
+        if keys & ugame.K_RIGHT == 0 and keys & ugame.K_LEFT == 0 and keys & ugame.K_DOWN == 0 and keys & ugame.K_UP == 0:
+            a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+            
         # if right D-Pad is pressed
         if keys & ugame.K_RIGHT != 0:
             # if ship moves off right screen, move it back
@@ -417,6 +433,8 @@ def game_scene():
                 snakob_bank.move(snakob_bank.x + constants.SNAKOB_SPEED, snakob_bank.y)
                 swords_bank.move((snakob_bank.x + 14)+ constants.SNAKOB_SPEED, (snakob_bank.y) - 4)
                 swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                
+
         # if left D-Pad is pressed
         if keys & ugame.K_LEFT != 0:
             # if ship moves off left screen, move it back
@@ -429,6 +447,7 @@ def game_scene():
                 snakob_bank.move(snakob_bank.x - constants.SNAKOB_SPEED, snakob_bank.y)
                 swords1_bank.move((snakob_bank.x - 14) - constants.SNAKOB_SPEED, (snakob_bank.y - 4))
                 swords_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+    
         if keys & ugame.K_UP != 0:
             # if ship moves off up screen, move it back
             if snakob_bank.y < 0:
@@ -436,6 +455,7 @@ def game_scene():
             else:
                 snakob_bank.move(snakob_bank.x, snakob_bank.y - 1)
                 swords_bank.move((snakob_bank.x + 14), snakob_bank.y - 4)
+                swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "up"
 
         # if left D-Pad is pressed
@@ -447,7 +467,19 @@ def game_scene():
             else:
                 snakob_bank.move(snakob_bank.x, snakob_bank.y + 1)
                 swords_bank.move((snakob_bank.x + 14), snakob_bank.y - 4)
+                swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "down"
+        
+        if a_button == constants.button_state["button_just_pressed"]:
+             if rocks[rock_number].x < 0:
+                    rocks[rock_number].move(snakob_bank.x, snakob_bank.y)
+                    break
+
+        for rock_number in range(len(rocks)):
+            if rocks[rock_number].x > 0:
+                rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y - constants.SNAKOB_SPEED)
+            if rocks[rock_number].y < constants.OFF_TOP_SCREEN:
+                rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
         # each frame move the aliens down the screen
         for snake_number in range(len(snakes)):
@@ -470,7 +502,7 @@ def game_scene():
                         # the second 4 numbers are the alien, it is more of a box so I just made it slightly smaller
                         #
                         # if you slow down the FPS, then you can see the interaction more easily to alter these numbers
-                        if stage.collide(rocks[rock_number].x + 6, rock[rock_number].y + 2,
+                        if stage.collide(rocks[rock_number].x + 6, rocks[rock_number].y + 2,
                                          rocks[rock_number].x + 11, rocks[rock_number].y + 12,
                                          snakes[snake_number].x + 1, snakes[snake_number].y,
                                          snakes[snake_number].x + 15, snakes[snake_number].y + 15):
@@ -501,14 +533,16 @@ def game_scene():
                                  snakes[snake_number].x + 15, snakes[snake_number].y + 15,
                                  snakob_bank.x, snakob_bank.y,
                                  snakob_bank.x + 15, snakob_bank.y + 15):
+                                     
                     # alien hit the ship
                     # Wait for 1 seconds
                     time.sleep(4.0)
                     # need to release the NeoPixels
                     sound.stop()
+                
 
         # redraw sprite list
-        game.render_sprites(snakob + sprites + swords + rocks + snakes)
+        game.render_sprites(snakob + cloud + sprites + swords + rocks + snakes)
         game.tick() # wait until refresh rate finishes
 
 def game_over_scene(final_score):
@@ -562,3 +596,4 @@ def game_over_scene(final_score):
 
 if __name__ == "__main__":
     blank_white_reset_scene()
+
