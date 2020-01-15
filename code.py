@@ -121,16 +121,18 @@ def mt_splash_scene():
         # get user input
 
         # update game logic
-        # Wait for 1 seconds
+
+        # Wait for 3 seconds
         time.sleep(3.0)
         game_splash_scene()
-        # Wait for 1 second
 
 
         # redraw sprite list
 
 def game_splash_scene():
+
       # this function is the Main menu
+
 
     # an image bank for CircuitPython
     image_bank_3 = stage.Bank.from_bmp16("game_splash_scene.bmp")
@@ -176,13 +178,13 @@ def game_splash_scene():
 
     left_eyebrow = stage.Sprite(image_bank_3, 2, 81, 52)
     snakob.append(left_eyebrow)
-
+   
     bulky_part_tail = stage.Sprite(image_bank_3, 8, 49, 84)
     snakob.append(bulky_part_tail)
-
+    
     lower_tail = stage.Sprite(image_bank_3, 12, 49, 100)
     snakob.append(lower_tail)
-
+    
     snake15 = stage.Sprite(image_bank_3, 15, 96, 100)
     snakob.append(snake15)
 
@@ -207,6 +209,7 @@ def game_splash_scene():
     game.layers = text + snakob + [background]
 
     game.render_block()
+   
     while True:
         # get user input
         # update game logic
@@ -218,7 +221,6 @@ def game_splash_scene():
 
 def main_menu_scene():
 
-    image_bank_4 = stage.Bank.from_bmp16("tree.bmp")
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_4, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
@@ -297,6 +299,8 @@ def game_scene():
         for snakob_number in range(len(snakes)):
             if snakes[snake_number].x < 0: # meaning it is off the screen, so available to move on the screen
                 snakes[snake_number].move(random.randint(6 + constants.SPRITE_SIZE, constants.SCREEN_X - constants.SPRITE_SIZE), constants.OFF_TOP_SCREEN)
+
+
                 break
 
     # buttons that you want to keep state information on
@@ -306,14 +310,21 @@ def game_scene():
     select_button = constants.button_state["button_up"]
 
     # get sound ready
+
     pew_sound = open("swords.wav", 'rb')  # to change the wav volume: https://audioalter.com/volume/
     boom_sound = open("squish.wav", 'rb')
     sound = ugame.audio
     sound.stop()
     sound.mute(False)
 
+    # an image bank for CircuitPython
     image_bank_1 = stage.Bank.from_bmp16("SPRITES.bmp")
+    # a list of sprites that will be updated every frame
     sprites = []
+    
+    image_bank_5 = stage.Bank.from_bmp16("background_for_game_scene.bmp")
+    
+    background_for_game_scene = []
 
     # create lasers for when we shoot
     rocks = []
@@ -338,14 +349,12 @@ def game_scene():
         
 
     # current number of aliens that should be moving down screen, start with just 1
-    snake_count = 5
-    show_snakes()
-    show_snakes()
-    show_snakes()
-    show_snakes()
+
+    snake_count = 1
     show_snakes()
 
     # add text at top of screen for score
+
 
     snakob = []
     snakob_bank = stage.Sprite(image_bank_1, 13, int(constants.SCREEN_X / 2), constants.SCREEN_Y - constants.SPRITE_SIZE)
@@ -358,7 +367,12 @@ def game_scene():
     swords.append(swords1_bank) # insert at the top of sprite list
 
     # sets the background to image 0 in the bank
+<<<<<<< HEAD
     background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
+=======
+    background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y) 
+
+>>>>>>> 91153dfa2f82b7ddff471ab2af198745db728112
     for x_location in range(constants.SCREEN_GRID_X):
         for y_location in range(constants.SCREEN_GRID_Y):
             boolean = random.randint(0 ,1)
@@ -367,23 +381,33 @@ def game_scene():
             if boolean == 1:
                 tile_picked = 14
             background.tile(x_location, y_location, tile_picked)
+
     snake_count = 1
     show_snakes()
+
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
+<<<<<<< HEAD
     game.layers = cloud + snakob + snakes + swords + sprites + rocks + [background]
+=======
+
+    game.layers = snakob + snakes + swords + sprites + rocks + [background]
+>>>>>>> 91153dfa2f82b7ddff471ab2af198745db728112
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
+
 
     # repeat forever, game loop
     while True:
         # get user input
         keys = ugame.buttons.get_pressed()
         #print(keys)
+
         rocks_number =5
+
 
         if keys & ugame.K_X != 0:  # A button
             if a_button == constants.button_state["button_up"]:
@@ -407,6 +431,7 @@ def game_scene():
         # if right D-Pad is pressed
         if keys & ugame.K_RIGHT != 0:
             # if ship moves off right screen, move it back
+
             if snakob_bank.x > constants.SCREEN_X - constants.SPRITE_SIZE:
                 snakob_bank.x = constants.SCREEN_X - constants.SPRITE_SIZE
             if swords_bank.x > constants.SCREEN_X - constants.SPRITE_SIZE:
@@ -463,7 +488,6 @@ def game_scene():
                 rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y - constants.SNAKOB_SPEED)
             if rocks[rock_number].y < constants.OFF_TOP_SCREEN:
                 rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-
 
         # each frame move the aliens down the screen
         for snake_number in range(len(snakes)):
@@ -579,4 +603,8 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     blank_white_reset_scene()
+=======
+    blank_white_reset_scene()
+>>>>>>> 91153dfa2f82b7ddff471ab2af198745db728112
