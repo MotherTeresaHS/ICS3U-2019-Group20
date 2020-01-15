@@ -367,12 +367,7 @@ def game_scene():
     swords.append(swords1_bank) # insert at the top of sprite list
 
     # sets the background to image 0 in the bank
-<<<<<<< HEAD
     background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
-=======
-    background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y) 
-
->>>>>>> 91153dfa2f82b7ddff471ab2af198745db728112
     for x_location in range(constants.SCREEN_GRID_X):
         for y_location in range(constants.SCREEN_GRID_Y):
             boolean = random.randint(0 ,1)
@@ -389,12 +384,9 @@ def game_scene():
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
-<<<<<<< HEAD
-    game.layers = cloud + snakob + snakes + swords + sprites + rocks + [background]
-=======
 
-    game.layers = snakob + snakes + swords + sprites + rocks + [background]
->>>>>>> 91153dfa2f82b7ddff471ab2af198745db728112
+    game.layers = cloud + snakob + snakes + swords + sprites + rocks + [background]
+
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
@@ -603,8 +595,5 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     blank_white_reset_scene()
-=======
-    blank_white_reset_scene()
->>>>>>> 91153dfa2f82b7ddff471ab2af198745db728112
+
