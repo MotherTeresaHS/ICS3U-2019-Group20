@@ -525,6 +525,8 @@ def game_scene():
                 if timer == 700:
                     health()
                     timer = 0
+                    show_snakes()
+                    show_snakes()
                 else:
                     continue
 
@@ -559,6 +561,8 @@ def game_scene():
                             show_snakes()
                             show_snakes()
                             show_snakes()
+                            show_snakes()
+                            show_snakes()
                             snake_number = snake_number + 1
         
         for ammo_number in range(len(apples)):
@@ -580,6 +584,8 @@ def game_scene():
                         health_text.cursor(0, 2)
                         health_text.move(1, 2)
                         health_text.text("Health: {0}".format(health_hearts))
+                        show_snakes()
+                        show_snakes()
         
         # each frame check if any of the aliens are touching the ship
         for snake_number in range(len(snakes)):
@@ -596,6 +602,8 @@ def game_scene():
                     health_text.cursor(0, 2)
                     health_text.move(1, 2)
                     health_text.text("Health: {0}".format(health_hearts))
+                    if health_hearts == 0:
+                        game_over_scene(score)
                 
                     
         # redraw sprite list
@@ -645,12 +653,11 @@ def game_over_scene(final_score):
 
         if keys & ugame.K_SELECT != 0:  # Start button
             keys = 0
-            menu_scene()
+            main_menu_scene()
             #break
 
         # redraw sprite list
 
 
 if __name__ == "__main__":
-    main_menu_scene()
     blank_white_reset_scene()
