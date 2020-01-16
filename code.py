@@ -294,7 +294,7 @@ def game_scene():
         # I know this is a function that is using variables outside of itself!
         #   BUT this code is going to be used in 2 places :)
         # make an alien show up on screen in the x-axis
-        for snakob_number in range(len(snakes)):
+        for snake_number in range(len(snakes)):
             if snakes[snake_number].x < 0: # meaning it is off the screen, so available to move on the screen
                 snakes[snake_number].move(random.randint(6 + constants.SPRITE_SIZE, constants.SCREEN_X - constants.SPRITE_SIZE), constants.OFF_TOP_SCREEN)
                 break
@@ -358,6 +358,33 @@ def game_scene():
     swords.append(swords_bank) # insert at the top of sprite list
     swords1_bank = stage.Sprite(image_bank_1, 9, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
     swords.append(swords1_bank) # insert at the top of sprite list
+    
+    score = 0
+    score_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
+    score_text.clear()
+    score_text.cursor(0, 0)
+    score_text.move(1, 1)
+    score_text.text("Score: {0}".format(score))
+    
+    health_hearts = 5
+    health_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
+    health_text.clear()
+    health_text.cursor(0, 2)
+    health_text.move(1, 2)
+    health_text.text("Health: {0}".format(health_hearts))
+    
+    apples = []
+    apple_bank = stage.Sprite(image_bank_1, 12, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
+    apples.append(apple_bank)
+    timer = 0
+    
+    def health():
+        apple_bank.move(random.randint(0 + constants.SPRITE_SIZE,
+                                            constants.SCREEN_X -
+                                            constants.SPRITE_SIZE),
+                             random.randint(0 + constants.SPRITE_SIZE,
+                                            constants.SCREEN_Y -
+                                            constants.SPRITE_SIZE))
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
@@ -376,7 +403,7 @@ def game_scene():
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
-    game.layers = cloud + snakob + snakes + swords + sprites + rocks + [background]
+    game.layers = apples + cloud + snakob + snakes + swords + sprites + rocks + [health_text] + [score_text] + [background]
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
@@ -458,17 +485,15 @@ def game_scene():
                 swords_bank.move((snakob_bank.x + 14), snakob_bank.y - 4)
                 swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "down"
-
         if a_button == constants.button_state["button_just_pressed"]:
             for rock_number in range(len(rocks)):
                 if rocks[rock_number].x < 0:
                     rocks[rock_number].move(snakob_bank.x, snakob_bank.y)
                     rock_direction[rock_number] = snakob_direction
 
-
         for rock_number in range(len(rocks)):
             if rocks[rock_number].x > 0 :
-                rock_direction = None
+                laser_direction = None
                 if rock_direction[rock_number] == "down":
                     rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y + constants.SNAKOB_SPEED)
                 elif rock_direction[rock_number] == "up":
@@ -486,10 +511,7 @@ def game_scene():
                     rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 if rocks[rock_number].x < 1:
                     rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-
-
-
-
+    
         # each frame move the aliens down the screen
         for snake_number in range(len(snakes)):
             if snakes[snake_number].x > 0: # meaning it is on the screen
@@ -497,6 +519,14 @@ def game_scene():
                 if snakes[snake_number].y > constants.SCREEN_Y:
                     snakes[snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                     show_snakes() # make it randomly show up at top again
+        for counter in range(1, 61):
+            if counter == 60:
+                timer = timer + 1
+                if timer == 700:
+                    health()
+                    timer = 0
+                else:
+                    continue
 
         # each frame check if any of the lasers are touching any of the aliens
         for rock_number in range(len(rocks)):
@@ -526,13 +556,31 @@ def game_scene():
                             score_text.text("Score: {0}".format(score))
                             # this will freeze the screen for a split second, but we have no option
                             game.render_block()
-                            # play sound effect
-                            sound.stop()
-                            sound.play(boom_sound)
-                            show_snake()
-                            show_snake()
-                            snake_count = snake_count + 1
-
+                            show_snakes()
+                            show_snakes()
+                            show_snakes()
+                            snake_number = snake_number + 1
+        
+        for ammo_number in range(len(apples)):
+            if apples[ammo_number].x > 0:
+                if snakob_bank.x > 0:
+                    if stage.collide(apples[ammo_number].x + 6,
+                                     apples[ammo_number].y + 3,
+                                     apples[ammo_number].x + 10,
+                                     apples[ammo_number].y + 13,
+                                     snakob_bank.x + 1,
+                                     snakob_bank.y + 1,
+                                     snakob_bank.x + 14,
+                                     snakob_bank.y + 14):
+                        apples[ammo_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                        health_hearts = health_hearts + 1
+                        if health_hearts == 6:
+                            health_hearts = 5
+                        health_text.clear()
+                        health_text.cursor(0, 2)
+                        health_text.move(1, 2)
+                        health_text.text("Health: {0}".format(health_hearts))
+        
         # each frame check if any of the aliens are touching the ship
         for snake_number in range(len(snakes)):
             if snakes[snake_number].x > 0:
@@ -542,16 +590,16 @@ def game_scene():
                                  snakes[snake_number].x + 15, snakes[snake_number].y + 15,
                                  snakob_bank.x, snakob_bank.y,
                                  snakob_bank.x + 15, snakob_bank.y + 15):
-
-                    # alien hit the ship
-                    # Wait for 1 seconds
-                    time.sleep(4.0)
-                    # need to release the NeoPixels
-                    sound.stop()
-
-
+                    snakes[snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    health_hearts = health_hearts - 1
+                    health_text.clear()
+                    health_text.cursor(0, 2)
+                    health_text.move(1, 2)
+                    health_text.text("Health: {0}".format(health_hearts))
+                
+                    
         # redraw sprite list
-        game.render_sprites(snakob + cloud + sprites + swords + rocks + snakes)
+        game.render_sprites(snakob + apples + cloud + sprites + swords + rocks + snakes)
         game.tick() # wait until refresh rate finishes
 
 def game_over_scene(final_score):
