@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+##!/usr/bin/env python3
 
 # Created by: Cameron and RJ
 # Created on: Dec 2019
@@ -121,23 +121,16 @@ def mt_splash_scene():
         # get user input
 
         # update game logic
-<<<<<<< HEAD
         # Wait for 1 seconds
         time.sleep(3.0)
         game_splash_scene()
         # Wait for 1 second
 
-=======
-
-        # Wait for 3 seconds
-        time.sleep(3.0)
-        game_splash_scene()
->>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
 
         # redraw sprite list
 
 def game_splash_scene():
-    # this function is the Main menu
+      # this function is the Main menu
 
     # an image bank for CircuitPython
     image_bank_3 = stage.Bank.from_bmp16("game_splash_scene.bmp")
@@ -214,8 +207,6 @@ def game_splash_scene():
     game.layers = text + snakob + [background]
 
     game.render_block()
-    
-    # repeat forever, game loop
     while True:
         # get user input
         # update game logic
@@ -235,6 +226,7 @@ def main_menu_scene():
     sprites = []
 
     background.tile(2, 2, 0)
+
 
     # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
     top_right_of_tree = stage.Sprite(image_bank_4, 13, 65, 116)
@@ -277,7 +269,7 @@ def main_menu_scene():
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
-    
+
 
     stars = []
     while True:
@@ -352,13 +344,12 @@ def game_scene():
     swords = []
     swords_bank = stage.Sprite(image_bank_1, 8, int(constants.SCREEN_X / 2), constants.SCREEN_Y - constants.SPRITE_SIZE)
     snakob.append(swords_bank) # insert at the top of sprite list
-    
+
     # counter for snakes
     snake_counter = 0
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
-
     for x_location in range(constants.SCREEN_GRID_X):
         for y_location in range(constants.SCREEN_GRID_Y):
             boolean = random.randint(0 ,1)
@@ -367,25 +358,16 @@ def game_scene():
             if boolean == 1:
                 tile_picked = 14
             background.tile(x_location, y_location, tile_picked)
-<<<<<<< HEAD
     snake_count = 1
     show_snakes()
-=======
->>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
-<<<<<<< HEAD
     game.layers = snakob + snakes + swords + sprites + rocks + [background]
-=======
-
-    game.layers = sprites + rocks + snakob + [score_text] + [background]
->>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
-
 
     # repeat forever, game loop
     while True:
@@ -442,17 +424,17 @@ def game_scene():
             else:
                 snakob_bank.move(snakob_bank.x, snakob_bank.y + 1)
                 snakob_direction = "down"
-                
 
-        def reset_left_snake():
+
+    def reset_left_snake():
         # Sets and resets the start coordinates of snakes starting on the left
         for left_snake_number in range(len(left_snakes)):
             if left_snakes[left_snake_number].x < 0:
                 left_snakes[left_snake_number].move(random.randint
-                                                          (-100, 0 -
-                                                           constants.SPRITE_SIZE),
-                                                          random.randint
-                                                          (0, constants.SCREEN_Y))
+                                                        (-100, 0 -
+                                                        constants.SPRITE_SIZE),
+                                                        random.randint
+                                                        (0, constants.SCREEN_Y))
                 break
 
     def reset_top_snake():
@@ -513,7 +495,7 @@ def game_scene():
                                              constants.OFF_SCREEN_X,
                                              constants.OFF_SCREEN_Y)
         right_snakes.append(single_right_snake)
-    reset_right_asteroid()
+    reset_right_snake()
 
     # snakes staring from the bottom
     bottom_snakes = []
@@ -526,25 +508,9 @@ def game_scene():
 
     start_time = time.time()
 
-        # each frame check if any of the aliens are touching the ship
-        for snake_number in range(len(snakes)):
-            if snakes[snake_number].x > 0:
-                # https://circuitpython-stage.readthedocs.io/en/latest/#stage.collide
-                # and https://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
-                if stage.collide(snakes[snake_number].x + 1, snakes[snake_number].y,
-                                 snakes[snake_number].x + 15, snakes[snake_number].y + 15,
-                                 snakob_bank.x, snakob_bank.y,
-                                 snakob_bank.x + 15, snakob_bank.y + 15):
-                    # alien hit the ship
-                    # Wait for 1 seconds
-                    time.sleep(4.0)
-                    # need to release the NeoPixels
-                    sound.stop()
-
-
-for snake_number in range(len(left_snakes)):
-            if left_snakes[snake_number].x > 0:
-                if stage.collide(left_snakes[snake_number].x + 1,
+    for snake_number in range(len(left_snakes)):
+        if left_snakes[snake_number].x > 0:
+            if stage.collide(left_snakes[snake_number].x + 1,
                                  left_snakes[snake_number].y + 1,
                                  left_snakes[snake_number].x + 15,
                                  left_snakes[snake_number].y + 15,
@@ -554,7 +520,7 @@ for snake_number in range(len(left_snakes)):
                     sound.stop()
                     game_over_scene(snake_counter, start_time)
 
-        # This detects a collision between the ship and asteroids going left
+        # This detects a collision between snakob and snakes going up
         for snake_number in range(len(right_snakes)):
             if right_snakes[snake_number].x > 0:
                 if stage.collide(right_snakes[snake_number].x + 1,
@@ -567,7 +533,7 @@ for snake_number in range(len(left_snakes)):
                     sound.stop()
                     game_over_scene(snake_counter, start_time)
 
-    # This detects a collision between the ship and asteroids going up
+    # This detects a collision between snakob and snakes going up
         for snake_number in range(len(bottom_snakes)):
             if bottom_snakes[snake_number].x > 0:
                 if stage.collide(bottom_snakes[snake_number].x + 1,
@@ -580,9 +546,53 @@ for snake_number in range(len(left_snakes)):
                     sound.stop()
                     game_over_scene(snake_counter, start_time)
 
-        # redraw sprite list
-        game.render_sprites(left_snakes + right_snakes + top_snakes + snakob + sprites + swords + bottom_snakes)
-        game.tick()
+     # Scroll snakes from left of screen
+        for left_snake_number in range(len(left_snakes)):
+            if left_snakes[left_snake_number].x < constants.OFF_RIGHT_SCREEN:
+                left_snakes[left_snake_number].move(
+                left_snakes[left_snake_number].x + constants.SNAKE_SPEED,
+                left_snakes[left_snake_number].y)
+                if left_snakes[left_snake_number].x > constants.SCREEN_X:
+                    left_snakes[left_snake_number].move(constants.OFF_SCREEN_X,
+                                                              constants.OFF_SCREEN_Y)
+                    reset_left_snake()
+
+        # Scroll snakes from top of screen
+        for top_snake_number in range(len(top_snakes)):
+            if top_snakes[top_snake_number].y < constants.OFF_BOTTOM_SCREEN:
+                top_snakes[top_snake_number].move(
+                top_snakes[top_snake_number].x,
+                top_snakes[top_snake_number].y + constants.SNAKE_SPEED)
+                if top_snakes[top_snake_number].y > constants.SCREEN_Y:
+                    top_snakes[top_snake_number].move(constants.OFF_SCREEN_X,
+                                                            constants.OFF_SCREEN_Y)
+                    reset_top_snake()
+
+        # Scroll snakes from right of screen left
+        for right_snake_number in range(len(right_snakes)):
+            if right_snakes[right_snake_number].x > constants.OFF_LEFT_SCREEN:
+                right_snakes[right_snake_number].move(
+                right_snakes[right_snake_number].x - constants.SNAKE_SPEED,
+                right_snakes[right_snake_number].y)
+                if right_snakes[right_snake_number].x < 0 - constants.SPRITE_SIZE:
+                    right_snakes[right_snake_number].move(constants.OFF_SCREEN_X,
+                                                                constants.OFF_SCREEN_Y)
+                    reset_right_snake()
+
+        # Scroll snakes from bottom of screen
+        for down_snake_number in range(len(bottom_snakes)):
+            if bottom_snakes[down_snake_number].y > constants.OFF_TOP_SCREEN:
+                bottom_snakes[down_snake_number].move(
+                bottom_snakes[down_snake_number].x,
+                bottom_snakes[down_snake_number].y - constants.SNAKE_SPEED)
+                if bottom_snakes[down_snake_number].y < 0 - constants.SPRITE_SIZE:
+                    bottom_snakes[down_snake_number].move(constants.OFF_SCREEN_X,
+                                                                constants.OFF_SCREEN_Y)
+                    reset_bottom_snake()
+
+
+    game.render_sprites(left_snakes + right_snakes + top_snakes + snakob + sprites + swords + bottom_snakes)
+    game.tick()
 
 def game_over_scene(final_score):
     # this function is the game over scene
@@ -634,9 +644,5 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     main_menu_scene()
     blank_white_reset_scene()
-=======
-    blank_white_reset_scene()
->>>>>>> 9d4b5ca56faa2979d80edc14b396e4461c1b92bc
