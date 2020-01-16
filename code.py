@@ -358,26 +358,31 @@ def game_scene():
     swords.append(swords_bank) # insert at the top of sprite list
     swords1_bank = stage.Sprite(image_bank_1, 9, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
     swords.append(swords1_bank) # insert at the top of sprite list
-    
+
+    sparks = []
+    spark_bank = stage.Sprite(image_bank_1, 10, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
+    sparks.append(spark_bank) # insert at the top of sprite list
+
+
     score = 0
     score_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
     score_text.clear()
     score_text.cursor(0, 0)
     score_text.move(1, 1)
     score_text.text("Score: {0}".format(score))
-    
+
     health_hearts = 5
     health_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
     health_text.clear()
     health_text.cursor(0, 2)
     health_text.move(1, 2)
     health_text.text("Health: {0}".format(health_hearts))
-    
+
     apples = []
     apple_bank = stage.Sprite(image_bank_1, 12, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
     apples.append(apple_bank)
     timer = 0
-    
+
     def health():
         apple_bank.move(random.randint(0 + constants.SPRITE_SIZE,
                                             constants.SCREEN_X -
@@ -403,7 +408,7 @@ def game_scene():
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
-    game.layers = apples + cloud + snakob + snakes + swords + sprites + rocks + [health_text] + [score_text] + [background]
+    game.layers = apples + sparks + cloud + snakob + snakes + swords + sprites + rocks + [health_text] + [score_text] + [background]
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
@@ -422,9 +427,20 @@ def game_scene():
                 a_button = constants.button_state["button_still_pressed"]
         else:
             if a_button == constants.button_state["button_still_pressed"]:
-                a_button = constants.button_state["button_released"]
+                a_button = constants.button_state["button_just_pressed"]
             else:
                 a_button = constants.button_state["button_up"]
+        
+        if keys & ugame.K_O != 0:  # A button
+            if b_button == constants.button_state["button_up"]:
+                b_button = constants.button_state["button_just_pressed"]
+            elif b_button == constants.button_state["button_just_pressed"]:
+                b_button = constants.button_state["button_still_pressed"]
+        else:
+            if b_button == constants.button_state["button_still_pressed"]:
+                b_button = constants.button_state["button_just_pressed"]
+            else:
+                b_button = constants.button_state["button_up"]
 
         # update game logic
         if keys & ugame.K_RIGHT != 0 or keys & ugame.K_LEFT != 0 or keys & ugame.K_DOWN != 0 or keys & ugame.K_UP != 0:
@@ -491,6 +507,18 @@ def game_scene():
                     rocks[rock_number].move(snakob_bank.x, snakob_bank.y)
                     rock_direction[rock_number] = snakob_direction
 
+        if b_button == constants.button_state["button_just_pressed"]:
+            if swords1_bank.x > 0:
+                spark_bank.move(swords1_bank.x, swords1_bank.y)
+            elif swords_bank.x > 0:
+                spark_bank.move(swords_bank.x, swords_bank.y)
+        
+        if b_button == constants.button_state["button_up"]:
+            if swords1_bank.x != 0:
+                spark_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+            elif swords_bank.x != 0:
+                spark_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+
         for rock_number in range(len(rocks)):
             if rocks[rock_number].x > 0 :
                 laser_direction = None
@@ -511,7 +539,7 @@ def game_scene():
                     rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 if rocks[rock_number].x < 1:
                     rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-    
+
         # each frame move the aliens down the screen
         for snake_number in range(len(snakes)):
             if snakes[snake_number].x > 0: # meaning it is on the screen
@@ -525,6 +553,8 @@ def game_scene():
                 if timer == 700:
                     health()
                     timer = 0
+                    show_snakes()
+                    show_snakes()
                     show_snakes()
                     show_snakes()
                 else:
@@ -563,8 +593,9 @@ def game_scene():
                             show_snakes()
                             show_snakes()
                             show_snakes()
+                            show_snakes()
                             snake_number = snake_number + 1
-        
+
         for ammo_number in range(len(apples)):
             if apples[ammo_number].x > 0:
                 if snakob_bank.x > 0:
@@ -586,7 +617,7 @@ def game_scene():
                         health_text.text("Health: {0}".format(health_hearts))
                         show_snakes()
                         show_snakes()
-        
+
         # each frame check if any of the aliens are touching the ship
         for snake_number in range(len(snakes)):
             if snakes[snake_number].x > 0:
@@ -604,8 +635,8 @@ def game_scene():
                     health_text.text("Health: {0}".format(health_hearts))
                     if health_hearts == 0:
                         game_over_scene(score)
-                
-                    
+
+
         # redraw sprite list
         game.render_sprites(snakob + apples + cloud + sprites + swords + rocks + snakes)
         game.tick() # wait until refresh rate finishes
@@ -660,4 +691,4 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
-    blank_white_reset_scene()
+    game_scene()
