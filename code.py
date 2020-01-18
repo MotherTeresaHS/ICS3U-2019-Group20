@@ -102,7 +102,7 @@ def mt_splash_scene():
     coin_sound = open("coin.wav", 'rb')
     sound = ugame.audio
     sound.stop()
-    sound.mute(True)
+    sound.mute(False)
     sound.play(coin_sound)
 
 
@@ -130,18 +130,21 @@ def mt_splash_scene():
         # redraw sprite list
 
 def game_splash_scene():
-      # this function is the Main menu
+    # this function is the Game splash scene
 
-    # an image bank for CircuitPython
+    # Gets an image bank for CircuitPython
     image_bank_3 = stage.Bank.from_bmp16("game_splash_scene.bmp")
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_3, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
 
+    # set up the sprite list
     sprites = []
 
+    # sets up the list for the giant sprite 
     snakob = []
-
+    
+    # appends the snake into one big sprite
     background.tile(0, 2, 0)
 
     bottom_left = stage.Sprite(image_bank_3, 13, 65, 100)
@@ -186,6 +189,7 @@ def game_splash_scene():
     snake15 = stage.Sprite(image_bank_3, 15, 96, 100)
     snakob.append(snake15)
 
+    # text for the splash screen
     text = []
 
     text1 = stage.Text(width=200, height=200, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
@@ -199,7 +203,7 @@ def game_splash_scene():
     snake_sound = open("1234.wav", 'rb')
     sound = ugame.audio
     sound.stop()
-    sound.mute(True)
+    sound.mute(False)
     sound.play(snake_sound)
 
     game = stage.Stage(ugame.display, 60)
@@ -217,18 +221,22 @@ def game_splash_scene():
         main_menu_scene()
 
 def main_menu_scene():
+    # This is the main menu scene
 
+
+    # gets image bank ready 
     image_bank_4 = stage.Bank.from_bmp16("tree.bmp")
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_4, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
 
+    # gets the sprite list ready 
     sprites = []
 
     background.tile(2, 2, 0)
 
-
     # used this program to split the iamge into tile: https://ezgif.com/sprite-cutter/ezgif-5-818cdbcc3f66.png
+    # This part puts the tree on the screen
     top_right_of_tree = stage.Sprite(image_bank_4, 13, 65, 116)
     sprites.append(top_right_of_tree)
     top_middle_of_tree = stage.Sprite(image_bank_4, 14, 81, 116)
@@ -254,6 +262,7 @@ def main_menu_scene():
     verybottem_middle_of_tree = stage.Sprite(image_bank_4, 11, 97, 100)
     sprites.append(verybottem_middle_of_tree)
 
+    # gets the text ready 
     text = []
 
     text1 = stage.Text(width=50, height=30, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
@@ -270,7 +279,7 @@ def main_menu_scene():
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
 
-
+    # creates random stars to appear 
     stars = []
     while True:
         time.sleep(1.0)
@@ -290,15 +299,6 @@ def main_menu_scene():
             #break
 
 def game_scene():
-    def show_snakes():
-        # I know this is a function that is using variables outside of itself!
-        #   BUT this code is going to be used in 2 places :)
-        # make an alien show up on screen in the x-axis
-        for snake_number in range(len(snakes)):
-            if snakes[snake_number].x < 0: # meaning it is off the screen, so available to move on the screen
-                snakes[snake_number].move(random.randint(6 + constants.SPRITE_SIZE, constants.SCREEN_X - constants.SPRITE_SIZE), constants.OFF_TOP_SCREEN)
-                break
-
     # buttons that you want to keep state information on
     a_button = constants.button_state["button_up"]
     b_button = constants.button_state["button_up"]
@@ -306,16 +306,19 @@ def game_scene():
     select_button = constants.button_state["button_up"]
 
     # get sound ready
-    pew_sound = open("swords.wav", 'rb')  # to change the wav volume: https://audioalter.com/volume/
+    pew_sound = open("blip.wav", 'rb')  # to change the wav volume: https://audioalter.com/volume/
     boom_sound = open("squish.wav", 'rb')
+    crash_sound = open('boing3.wav', 'rb')
+    health_sound = open('bloop_x.wav', 'rb')
     sound = ugame.audio
     sound.stop()
     sound.mute(False)
-
+    
+    # get image bank ready
     image_bank_1 = stage.Bank.from_bmp16("SPRITES.bmp")
     sprites = []
 
-    # create lasers for when we shoot
+    # create rocks for when we shoot
     rocks = []
     rock_direction = []
     for rock_number in range(constants.TOTAL_NUMBER_OF_ROCKS):
@@ -323,54 +326,43 @@ def game_scene():
         rocks.append(a_single_rock)
         rock_direction.append("None")
 
-    # create aliens
-    snakes = []
-    for snake_number in range(constants.TOTAL_NUMBER_OF_SNAKES):
-        a_single_snake = stage.Sprite(image_bank_1, 7, constants.OFF_SCREEN_X, constants.OFF_SCREEN_X)
-        snakes.append(a_single_snake)
-
+    # create the particle cloud for when snakob moves
     cloud = []
     a_single_cloud = stage.Sprite(image_bank_1, 11, constants.OFF_SCREEN_X, constants.OFF_SCREEN_X)
     cloud.append(a_single_cloud)
 
+    
     def show_clouds():
+        # create the particle cloud for when snakob moves
         a_single_cloud.move(snakob_bank.x + constants.SNAKOB_SPEED, snakob_bank.y)
         a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
-
-
-    # current number of aliens that should be moving down screen, start with just 1
-    snake_count = 5
-    show_snakes()
-    show_snakes()
-    show_snakes()
-    show_snakes()
-    show_snakes()
-
-    # add text at top of screen for score
-
+    # This creates snakob 
     snakob = []
     snakob_bank = stage.Sprite(image_bank_1, 13, int(constants.SCREEN_X / 2), constants.SCREEN_Y - constants.SPRITE_SIZE)
-    snakob.append(snakob_bank) # insert at the top of sprite list
-    # append sword
+    snakob.append(snakob_bank) #
+
+    # This creates the swords for snakobs left and right
     swords = []
     swords_bank = stage.Sprite(image_bank_1, 8, int((constants.SCREEN_X / 2) + 14), ((constants.SCREEN_Y - 4) - constants.SPRITE_SIZE))
-    swords.append(swords_bank) # insert at the top of sprite list
+    swords.append(swords_bank) 
     swords1_bank = stage.Sprite(image_bank_1, 9, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
-    swords.append(swords1_bank) # insert at the top of sprite list
+    swords.append(swords1_bank) 
 
+    # This creates the sparks for snakobs sword
     sparks = []
     spark_bank = stage.Sprite(image_bank_1, 10, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
-    sparks.append(spark_bank) # insert at the top of sprite list
+    sparks.append(spark_bank) 
 
-
+    # Gets the score ready 
     score = 0
     score_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
     score_text.clear()
     score_text.cursor(0, 0)
     score_text.move(1, 1)
     score_text.text("Score: {0}".format(score))
-
+    
+    # get the health bar ready 
     health_hearts = 5
     health_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
     health_text.clear()
@@ -378,20 +370,22 @@ def game_scene():
     health_text.move(1, 2)
     health_text.text("Health: {0}".format(health_hearts))
 
+    # create the apple sprite 
     apples = []
     apple_bank = stage.Sprite(image_bank_1, 12, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
     apples.append(apple_bank)
     timer = 0
 
     def health():
+        # makes the apples apear on screen
         apple_bank.move(random.randint(0 + constants.SPRITE_SIZE,
-                                            constants.SCREEN_X -
-                                            constants.SPRITE_SIZE),
-                             random.randint(0 + constants.SPRITE_SIZE,
-                                            constants.SCREEN_Y -
-                                            constants.SPRITE_SIZE))
+                                        constants.SCREEN_X -
+                                        constants.SPRITE_SIZE),
+                                        random.randint(0 + constants.SPRITE_SIZE,
+                                        constants.SCREEN_Y -
+                                        constants.SPRITE_SIZE))
 
-    # sets the background to image 0 in the bank
+    # sets the background to image 0 in the bank and randomly generates the backround
     background = stage.Grid(image_bank_1, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
     for x_location in range(constants.SCREEN_GRID_X):
         for y_location in range(constants.SCREEN_GRID_Y):
@@ -401,14 +395,98 @@ def game_scene():
             if boolean == 1:
                 tile_picked = 14
             background.tile(x_location, y_location, tile_picked)
+    
+    # sets the snake counts to these
     snake_count = 1
-    show_snakes()
+    snake_counter = 1
+
+    def reset_left_snake():
+        # Sets and resets the start coordinates of snakes starting on the left
+        for left_snake_number in range(len(left_snakes)):
+            if left_snakes[left_snake_number].x < 0:
+                left_snakes[left_snake_number].move(random.randint
+                                                        (-100, 0 -
+                                                        constants.SPRITE_SIZE),
+                                                        random.randint
+                                                        (0, constants.SCREEN_Y))
+                break
+
+    def reset_top_snake():
+        # Sets and resets the start coordinates of snakes starting on the top
+        for top_snake_number in range(len(top_snakes)):
+            if top_snakes[top_snake_number].y < 0:
+                top_snakes[top_snake_number].move(random.randint
+                                                        (0, constants.SCREEN_X),
+                                                        random.randint
+                                                        (-100, 0 -
+                                                         constants.SPRITE_SIZE))
+                break
+
+    def reset_right_snake():
+        # Sets and resets the start coordinates of snakes starting on the right
+        for right_snake_number in range(len(right_snakes)):
+            if right_snakes[right_snake_number].x < 0:
+                right_snakes[right_snake_number].move(random.randint
+                                                            (constants.SCREEN_X, 228),
+                                                            random.randint
+                                                            (0, constants.SCREEN_Y))
+                break
+
+    def reset_bottom_snake():
+        # Sets and resets the start coordinates of snakes starting on the bottom
+        for down_snake_number in range(len(bottom_snakes)):
+            if bottom_snakes[down_snake_number].y < 0:
+                bottom_snakes[down_snake_number].move(random.randint
+                                                        (0, constants.SCREEN_X),
+                                                        random.randint
+                                                        (160 + constants.SPRITE_SIZE,
+                                                         260))
+                break
+
+    # Gets the left snakes ready 
+    left_snakes = []
+    for left_snake_number in range(constants.SNAKE_CREATION_TOTAL):
+        single_left_snake = stage.Sprite(image_bank_1, 4,
+                                            constants.OFF_SCREEN_X,
+                                            constants.OFF_SCREEN_Y)
+        left_snakes.append(single_left_snake)
+    reset_left_snake()
+
+    # Gets the top snakes ready
+    top_snakes = []
+    for top_snake_number in range(constants.SNAKE_CREATION_TOTAL):
+        single_up_snake = stage.Sprite(image_bank_1, 6,
+                                          constants.OFF_SCREEN_X,
+                                          constants.OFF_SCREEN_Y)
+        top_snakes.append(single_up_snake)
+    reset_top_snake()
+
+    # Gets the right snakes ready
+    right_snakes = []
+    for right_snake_number in range(constants.SNAKE_CREATION_TOTAL):
+        single_right_snake = stage.Sprite(image_bank_1, 7,
+                                             constants.OFF_SCREEN_X,
+                                             constants.OFF_SCREEN_Y)
+        right_snakes.append(single_right_snake)
+    reset_right_snake()
+
+    # Gets the bottem snakes ready
+    bottom_snakes = []
+    for down_snake_number in range(constants.SNAKE_CREATION_TOTAL):
+        single_down_snake = stage.Sprite(image_bank_1, 5,
+                                            constants.OFF_SCREEN_X,
+                                            constants.OFF_SCREEN_Y)
+        bottom_snakes.append(single_down_snake)
+    reset_bottom_snake()
+
+    start_time = time.time()
+
 
     # create a stage for the background to show up on
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
     # set the layers, items show up in order
-    game.layers = apples + sparks + cloud + snakob + snakes + swords + sprites + rocks + [health_text] + [score_text] + [background]
+    game.layers = apples + cloud + snakob + top_snakes + bottom_snakes + left_snakes + right_snakes + swords + sprites + rocks + [health_text] + [score_text] + [background]
     # render the background and inital location of sprite list
     # most likely you will only render background once per scene
     game.render_block()
@@ -417,9 +495,12 @@ def game_scene():
     while True:
         # get user input
         keys = ugame.buttons.get_pressed()
-        #print(keys)
-        rocks_number =5
-
+        #print(keys
+        
+        # sets rock number to zero
+        rock_number = 0
+        
+        # chcecks if keys & ugame.K_X != 0: A button
         if keys & ugame.K_X != 0:  # A button
             if a_button == constants.button_state["button_up"]:
                 a_button = constants.button_state["button_just_pressed"]
@@ -427,37 +508,37 @@ def game_scene():
                 a_button = constants.button_state["button_still_pressed"]
         else:
             if a_button == constants.button_state["button_still_pressed"]:
-                a_button = constants.button_state["button_just_pressed"]
+                a_button = constants.button_state["button_released"]
             else:
                 a_button = constants.button_state["button_up"]
-        
-        if keys & ugame.K_O != 0:  # A button
+
+        if keys & ugame.K_O != 0:  # B button
             if b_button == constants.button_state["button_up"]:
                 b_button = constants.button_state["button_just_pressed"]
             elif b_button == constants.button_state["button_just_pressed"]:
                 b_button = constants.button_state["button_still_pressed"]
         else:
             if b_button == constants.button_state["button_still_pressed"]:
-                b_button = constants.button_state["button_just_pressed"]
+                b_button = constants.button_state["button_released"]
             else:
                 b_button = constants.button_state["button_up"]
 
-        # update game logic
+        # IF one of the d pad is being pressed, move the prticles with snakob 
         if keys & ugame.K_RIGHT != 0 or keys & ugame.K_LEFT != 0 or keys & ugame.K_DOWN != 0 or keys & ugame.K_UP != 0:
             a_single_cloud.move((snakob_bank.x - 3) + constants.SNAKOB_SPEED, (snakob_bank.y + 2))
 
-
+        # takes off cloud particles if none of the d pad is being pressed 
         if keys & ugame.K_RIGHT == 0 and keys & ugame.K_LEFT == 0 and keys & ugame.K_DOWN == 0 and keys & ugame.K_UP == 0:
             a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
         # if right D-Pad is pressed
         if keys & ugame.K_RIGHT != 0:
-            # if ship moves off right screen, move it back
+            # if snakob moves off right screen, move it back
             if snakob_bank.x > constants.SCREEN_X - constants.SPRITE_SIZE:
                 snakob_bank.x = constants.SCREEN_X - constants.SPRITE_SIZE
             if swords_bank.x > constants.SCREEN_X - constants.SPRITE_SIZE:
                 swords_bank.x = constants.SCREEN_X - constants.SPRITE_SIZE
-            # else move ship right
+            # else move snakob right and sword
             else:
                 snakob_bank.move(snakob_bank.x + constants.SNAKOB_SPEED, snakob_bank.y)
                 swords_bank.move((snakob_bank.x + 14)+ constants.SNAKOB_SPEED, (snakob_bank.y) - 4)
@@ -467,24 +548,25 @@ def game_scene():
 
         # if left D-Pad is pressed
         if keys & ugame.K_LEFT != 0:
-            # if ship moves off left screen, move it back
+            # if snakob moves off left screen, move it back
             if snakob_bank.x < 0:
                 snakob_bank.x = 0
             if swords_bank.x < 16:
                 swords_bank.x = 16
-            # else move ship left
+            # else move snakob left and the sword
             else:
                 snakob_bank.move(snakob_bank.x - constants.SNAKOB_SPEED, snakob_bank.y)
                 swords1_bank.move((snakob_bank.x - 14) - constants.SNAKOB_SPEED, (snakob_bank.y - 4))
                 swords_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "left"
 
+        # if left up-Pad is pressed
         if keys & ugame.K_UP != 0:
-            # if ship moves off up screen, move it back
+            # if snakob moves off up screen, move it back
             if snakob_bank.y < 0:
                 snakob_bank.y = 0
             else:
-                snakob_bank.move(snakob_bank.x, snakob_bank.y - 1)
+                snakob_bank.move(snakob_bank.x, snakob_bank.y - constants.SNAKOB_SPEED)
                 swords_bank.move((snakob_bank.x + 14), snakob_bank.y - 4)
                 swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "up"
@@ -492,44 +574,45 @@ def game_scene():
 
         # if left D-Pad is pressed
         if keys & ugame.K_DOWN != 0:
-            # if ship moves off down screen, move it back
+            # if snakob moves off down screen, move it back
             if snakob_bank.y > 116:
                 snakob_bank.y = 116
-            # else move ship down
+            # else move snakob down and sword
             else:
-                snakob_bank.move(snakob_bank.x, snakob_bank.y + 1)
+                snakob_bank.move(snakob_bank.x, snakob_bank.y + constants.SNAKOB_SPEED)
                 swords_bank.move((snakob_bank.x + 14), snakob_bank.y - 4)
                 swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "down"
+
+        # if the a button is pressed, move rocks across the screen 
         if a_button == constants.button_state["button_just_pressed"]:
             for rock_number in range(len(rocks)):
-                if rocks[rock_number].x < 0:
-                    rocks[rock_number].move(snakob_bank.x, snakob_bank.y)
-                    rock_direction[rock_number] = snakob_direction
+                if rock_number == 3:
+                        break
+                elif rocks[rock_number].x < 0:
+                        rocks[rock_number].move(snakob_bank.x, snakob_bank.y)
+                        rock_direction[rock_number] = snakob_direction
+                        sound.stop()
+                        sound.play(pew_sound)
 
         if b_button == constants.button_state["button_just_pressed"]:
-            if swords1_bank.x > 0:
-                spark_bank.move(swords1_bank.x, swords1_bank.y)
-            elif swords_bank.x > 0:
-                spark_bank.move(swords_bank.x, swords_bank.y)
-        
-        if b_button == constants.button_state["button_up"]:
-            if swords1_bank.x != 0:
+            if swords1_bank.x < 0:
                 spark_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-            elif swords_bank.x != 0:
+            elif swords_bank.x < 0:
                 spark_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
+        # makes the rocks move across the screen acoring to snakobs orientation 
         for rock_number in range(len(rocks)):
             if rocks[rock_number].x > 0 :
                 laser_direction = None
                 if rock_direction[rock_number] == "down":
-                    rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y + constants.SNAKOB_SPEED)
+                    rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y + constants.ROCK_SPEED)
                 elif rock_direction[rock_number] == "up":
-                    rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y - constants.SNAKOB_SPEED)
+                    rocks[rock_number].move(rocks[rock_number].x, rocks[rock_number].y - constants.ROCK_SPEED)
                 elif rock_direction[rock_number] == "left":
-                    rocks[rock_number].move(rocks[rock_number].x - constants.SNAKOB_SPEED, rocks[rock_number].y)
+                    rocks[rock_number].move(rocks[rock_number].x - constants.ROCK_SPEED, rocks[rock_number].y)
                 elif rock_direction[rock_number] == "right":
-                    rocks[rock_number].move(rocks[rock_number].x + constants.SNAKOB_SPEED, rocks[rock_number].y)
+                    rocks[rock_number].move(rocks[rock_number].x + constants.ROCK_SPEED, rocks[rock_number].y)
 
                 if rocks[rock_number].y < constants.OFF_TOP_SCREEN:
                     rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
@@ -540,47 +623,79 @@ def game_scene():
                 if rocks[rock_number].x < 1:
                     rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
-        # each frame move the aliens down the screen
-        for snake_number in range(len(snakes)):
-            if snakes[snake_number].x > 0: # meaning it is on the screen
-                snakes[snake_number].move(snakes[snake_number].x, snakes[snake_number].y + constants.SNAKE_SPEED)
-                if snakes[snake_number].y > constants.SCREEN_Y:
-                    snakes[snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-                    show_snakes() # make it randomly show up at top again
+        # this is the clock to make health packs apeer
         for counter in range(1, 61):
             if counter == 60:
                 timer = timer + 1
-                if timer == 700:
+                if timer == 500:
                     health()
                     timer = 0
-                    show_snakes()
-                    show_snakes()
-                    show_snakes()
-                    show_snakes()
                 else:
                     continue
 
-        # each frame check if any of the lasers are touching any of the aliens
+        # Scroll snakes from left of screen
+        for left_snake_number in range(len(left_snakes)):
+            if left_snakes[left_snake_number].x < constants.OFF_RIGHT_SCREEN:
+                left_snakes[left_snake_number].move(
+                left_snakes[left_snake_number].x + constants.SNAKE_SPEED,
+                left_snakes[left_snake_number].y)
+                if left_snakes[left_snake_number].x > constants.SCREEN_X:
+                    left_snakes[left_snake_number].move(constants.OFF_SCREEN_X,
+                                                              constants.OFF_SCREEN_Y)
+                    reset_left_snake()
+
+        # Scroll snakes from top of screen
+        for top_snake_number in range(len(top_snakes)):
+            if top_snakes[top_snake_number].y < constants.OFF_BOTTOM_SCREEN:
+                top_snakes[top_snake_number].move(
+                top_snakes[top_snake_number].x,
+                top_snakes[top_snake_number].y + constants.SNAKE_SPEED)
+                if top_snakes[top_snake_number].y > constants.SCREEN_Y:
+                    top_snakes[top_snake_number].move(constants.OFF_SCREEN_X,
+                                                            constants.OFF_SCREEN_Y)
+                    reset_top_snake()
+
+        # Scroll snakes from right of screen left
+        for right_snake_number in range(len(right_snakes)):
+            if right_snakes[right_snake_number].x > constants.OFF_LEFT_SCREEN:
+                right_snakes[right_snake_number].move(
+                right_snakes[right_snake_number].x - constants.SNAKE_SPEED,
+                right_snakes[right_snake_number].y)
+                if right_snakes[right_snake_number].x < 0 - constants.SPRITE_SIZE:
+                    right_snakes[right_snake_number].move(constants.OFF_SCREEN_X,
+                                                                constants.OFF_SCREEN_Y)
+                    reset_right_snake()
+
+        # Scroll snakes from bottom of screen
+        for down_snake_number in range(len(bottom_snakes)):
+            if bottom_snakes[down_snake_number].y > constants.OFF_TOP_SCREEN:
+                bottom_snakes[down_snake_number].move(
+                bottom_snakes[down_snake_number].x,
+                bottom_snakes[down_snake_number].y - constants.SNAKE_SPEED)
+                if bottom_snakes[down_snake_number].y < 0 - constants.SPRITE_SIZE:
+                    bottom_snakes[down_snake_number].move(constants.OFF_SCREEN_X,
+                                                                constants.OFF_SCREEN_Y)
+                    reset_bottom_snake()
+
+        # This detects if any rocks hit snakes heading right
         for rock_number in range(len(rocks)):
-            if rocks[rock_number].x > 0 :
-                for snake_number in range(len(snakes)):
-                    if snakes[snake_number].x > 0:
-                        # https://circuitpython-stage.readthedocs.io/en/latest/#stage.collide
-                        # and https://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
-                        # the first 4 numbers are the coordinates of A box
-                        # since the laser is thin, it made it thinner and slightly smaller
-                        #
-                        # the second 4 numbers are the alien, it is more of a box so I just made it slightly smaller
-                        #
-                        # if you slow down the FPS, then you can see the interaction more easily to alter these numbers
-                        if stage.collide(rocks[rock_number].x + 6, rocks[rock_number].y + 2,
-                                         rocks[rock_number].x + 11, rocks[rock_number].y + 12,
-                                         snakes[snake_number].x + 1, snakes[snake_number].y,
-                                         snakes[snake_number].x + 15, snakes[snake_number].y + 15):
-                            # you hit an alien
-                            snakes[snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-                            rocks[rock_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
-                            # add 1 to the score
+            if rocks[rock_number].x > 0:
+                for left_snake_number in range(len(left_snakes)):
+                    if left_snakes[left_snake_number].x > 0:
+                        if stage.collide(left_snakes[left_snake_number].x + 1,
+                                         left_snakes[left_snake_number].y + 1,
+                                         left_snakes[left_snake_number].x + 15,
+                                         left_snakes[left_snake_number].y + 15,
+                                         rocks[rock_number].x + 3,
+                                         rocks[rock_number].y + 3,
+                                         rocks[rock_number].x + 13,
+                                         rocks[rock_number].y + 13):
+                            left_snakes[left_snake_number].move(constants.OFF_SCREEN_X,
+                                                                 constants.OFF_SCREEN_Y)
+                            rocks[rock_number].move(constants.OFF_SCREEN_X,
+                                                      constants.OFF_SCREEN_Y)
+                            sound.stop()
+                            sound.play(boom_sound)
                             score += 1
                             score_text.clear()
                             score_text.cursor(0, 0)
@@ -588,14 +703,93 @@ def game_scene():
                             score_text.text("Score: {0}".format(score))
                             # this will freeze the screen for a split second, but we have no option
                             game.render_block()
-                            show_snakes()
-                            show_snakes()
-                            show_snakes()
-                            show_snakes()
-                            show_snakes()
-                            show_snakes()
-                            snake_number = snake_number + 1
+                            left_snake_number = left_snake_number + 1
 
+        # This detects if any rocks hit snakes heading down
+        for rock_number in range(len(rocks)):
+            if rocks[rock_number].x > 0:
+                for top_snake_number in range(len(top_snakes)):
+                    if top_snakes[top_snake_number].x > 0:
+                        if stage.collide(top_snakes[top_snake_number].x + 1,
+                                         top_snakes[top_snake_number].y + 1,
+                                         top_snakes[top_snake_number].x + 15,
+                                         top_snakes[top_snake_number].y + 15,
+                                         rocks[rock_number].x + 3,
+                                         rocks[rock_number].y + 3,
+                                         rocks[rock_number].x + 13,
+                                         rocks[rock_number].y + 13):
+                            top_snakes[top_snake_number].move(constants.OFF_SCREEN_X,
+                                                                constants.OFF_SCREEN_Y)
+                            rocks[rock_number].move(constants.OFF_SCREEN_X,
+                                                      constants.OFF_SCREEN_Y)
+                            sound.stop()
+                            sound.play(boom_sound)
+                            score += 1
+                            score_text.clear()
+                            score_text.cursor(0, 0)
+                            score_text.move(1, 1)
+                            score_text.text("Score: {0}".format(score))
+                            # this will freeze the screen for a split second, but we have no option
+                            game.render_block()
+                            top_snake_number = top_snake_number + 1
+
+        # This detects if any rocks hit snakes heading left
+        for rock_number in range(len(rocks)):
+            if rocks[rock_number].x > 0:
+                for right_snake_number in range(len(right_snakes)):
+                    if right_snakes[right_snake_number].x > 0:
+                        if stage.collide(right_snakes[right_snake_number].x + 1,
+                                         right_snakes[right_snake_number].y + 1,
+                                         right_snakes[right_snake_number].x + 15,
+                                         right_snakes[right_snake_number].y + 15,
+                                         rocks[rock_number].x + 3,
+                                         rocks[rock_number].y + 3,
+                                         rocks[rock_number].x + 13,
+                                         rocks[rock_number].y + 13):
+                            right_snakes[right_snake_number].move(constants.OFF_SCREEN_X,
+                                                                  constants.OFF_SCREEN_Y)
+                            rocks[rock_number].move(constants.OFF_SCREEN_X,
+                                                      constants.OFF_SCREEN_Y)
+                            sound.stop()
+                            sound.play(boom_sound)
+                            score += 1
+                            score_text.clear()
+                            score_text.cursor(0, 0)
+                            score_text.move(1, 1)
+                            score_text.text("Score: {0}".format(score))
+                            # this will freeze the screen for a split second, but we have no option
+                            game.render_block()
+                            right_snake_number = right_snake_number + 1
+
+        # This detects if any rocks hit snakes heading up
+        for rock_number in range(len(rocks)):
+            if rocks[rock_number].x > 0:
+                for bottom_snake_number in range(len(bottom_snakes)):
+                    if bottom_snakes[bottom_snake_number].x > 0:
+                        if stage.collide(bottom_snakes[bottom_snake_number].x + 1,
+                                         bottom_snakes[bottom_snake_number].y + 1,
+                                         bottom_snakes[bottom_snake_number].x + 15,
+                                         bottom_snakes[bottom_snake_number].y + 15,
+                                         rocks[rock_number].x + 3,
+                                         rocks[rock_number].y + 3,
+                                         rocks[rock_number].x + 13,
+                                         rocks[rock_number].y + 13):
+                            bottom_snakes[bottom_snake_number].move(constants.OFF_SCREEN_X,
+                                                                   constants.OFF_SCREEN_Y)
+                            rocks[rock_number].move(constants.OFF_SCREEN_X,
+                                                      constants.OFF_SCREEN_Y)
+                            sound.stop()
+                            sound.play(boom_sound)
+                            score += 1
+                            score_text.clear()
+                            score_text.cursor(0, 0)
+                            score_text.move(1, 1)
+                            score_text.text("Score: {0}".format(score))
+                            # this will freeze the screen for a split second, but we have no option
+                            game.render_block()
+                            bottom_snake_number = bottom_snake_number + 1
+        
+        # this detects if snakob has collided with an apple 
         for ammo_number in range(len(apples)):
             if apples[ammo_number].x > 0:
                 if snakob_bank.x > 0:
@@ -609,36 +803,90 @@ def game_scene():
                                      snakob_bank.y + 14):
                         apples[ammo_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                         health_hearts = health_hearts + 1
+                        sound.stop()
+                        sound.play(health_sound)
                         if health_hearts == 6:
                             health_hearts = 5
                         health_text.clear()
                         health_text.cursor(0, 2)
                         health_text.move(1, 2)
                         health_text.text("Health: {0}".format(health_hearts))
-                        show_snakes()
-                        show_snakes()
 
-        # each frame check if any of the aliens are touching the ship
-        for snake_number in range(len(snakes)):
-            if snakes[snake_number].x > 0:
-                # https://circuitpython-stage.readthedocs.io/en/latest/#stage.collide
-                # and https://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
-                if stage.collide(snakes[snake_number].x + 1, snakes[snake_number].y,
-                                 snakes[snake_number].x + 15, snakes[snake_number].y + 15,
-                                 snakob_bank.x, snakob_bank.y,
-                                 snakob_bank.x + 15, snakob_bank.y + 15):
-                    snakes[snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+        # detects collision in snakes and snakob
+        for left_snake_number in range(len(left_snakes)):
+            if left_snakes[left_snake_number].x > 0:
+                if stage.collide(left_snakes[left_snake_number].x + 1,
+                                 left_snakes[left_snake_number].y + 1,
+                                 left_snakes[left_snake_number].x + 15,
+                                 left_snakes[left_snake_number].y + 15,
+                                 snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
+                    left_snakes[left_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    sound.stop()
+                    sound.play(crash_sound)
                     health_hearts = health_hearts - 1
                     health_text.clear()
                     health_text.cursor(0, 2)
                     health_text.move(1, 2)
                     health_text.text("Health: {0}".format(health_hearts))
-                    if health_hearts == 0:
-                        game_over_scene(score)
+                    
+        # detects collision in snakes and snakob
+        for bottom_snake_number in range(len(bottom_snakes)):
+            if bottom_snakes[bottom_snake_number].x > 0:
+                if stage.collide(bottom_snakes[bottom_snake_number].x + 1,
+                                 bottom_snakes[bottom_snake_number].y + 1,
+                                 bottom_snakes[bottom_snake_number].x + 15,
+                                 bottom_snakes[bottom_snake_number].y + 15,
+                                 snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
+                    bottom_snakes[bottom_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    sound.stop()
+                    sound.play(crash_sound)
+                    health_hearts = health_hearts - 1
+                    health_text.clear()
+                    health_text.cursor(0, 2)
+                    health_text.move(1, 2)
+                    health_text.text("Health: {0}".format(health_hearts))
 
+
+        # This detects a collision between snakob and snakes going right
+        for right_snake_number in range(len(right_snakes)):
+            if right_snakes[right_snake_number].x > 0:
+                if stage.collide(right_snakes[right_snake_number].x + 1,
+                                 right_snakes[right_snake_number].y + 1,
+                                 right_snakes[right_snake_number].x + 15,
+                                 right_snakes[right_snake_number].y + 15,
+                                 snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
+                    right_snakes[right_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    sound.stop()
+                    sound.play(crash_sound)
+                    health_hearts = health_hearts - 1
+                    health_text.clear()
+                    health_text.cursor(0, 2)
+                    health_text.move(1, 2)
+                    health_text.text("Health: {0}".format(health_hearts))
+
+    # This detects a collision between snakob and snakes going up
+        for top_snake_number in range(len(top_snakes)):
+            if top_snakes[top_snake_number].x > 0:
+                if stage.collide(top_snakes[top_snake_number].x + 1,
+                                 top_snakes[top_snake_number].y + 1,
+                                 top_snakes[top_snake_number].x + 15,
+                                 top_snakes[top_snake_number].y + 15,
+                                 snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
+                    top_snakes[top_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    sound.stop()
+                    sound.play(crash_sound)
+                    health_hearts = health_hearts - 1
+                    health_text.clear()
+                    health_text.cursor(0, 2)
+                    health_text.move(1, 2)
+                    health_text.text("Health: {0}".format(health_hearts))
+        
+        # if the hearts are equal to zero, the game is over 
+        if health_hearts == 0:
+            game_over_scene(score)
 
         # redraw sprite list
-        game.render_sprites(snakob + apples + cloud + sprites + swords + rocks + snakes)
+        game.render_sprites(snakob + apples + cloud + sprites + sparks + swords + rocks + bottom_snakes + top_snakes + left_snakes + right_snakes)
         game.tick() # wait until refresh rate finishes
 
 def game_over_scene(final_score):
@@ -691,4 +939,4 @@ def game_over_scene(final_score):
 
 
 if __name__ == "__main__":
-    game_scene()
+    blank_white_reset_scene()
