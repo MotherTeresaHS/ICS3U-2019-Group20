@@ -10,7 +10,6 @@ import board
 import time
 import random
 import constants
-import neopixel
 
 
 def blank_white_reset_scene():
@@ -141,9 +140,9 @@ def game_splash_scene():
     # set up the sprite list
     sprites = []
 
-    # sets up the list for the giant sprite 
+    # sets up the list for the giant sprite
     snakob = []
-    
+
     # appends the snake into one big sprite
     background.tile(0, 2, 0)
 
@@ -214,23 +213,21 @@ def game_splash_scene():
     while True:
         # get user input
         # update game logic
-        time.sleep(4.0)
+        time.sleep(3.0)
         # redraw sprite list
-        game.render_sprites(snakob)
-        game.tick()
         main_menu_scene()
 
 def main_menu_scene():
     # This is the main menu scene
 
 
-    # gets image bank ready 
+    # gets image bank ready
     image_bank_4 = stage.Bank.from_bmp16("tree.bmp")
 
     # sets the background to image 0 in the bank
     background = stage.Grid(image_bank_4, constants.SCREEN_GRID_X, constants.SCREEN_GRID_Y)
 
-    # gets the sprite list ready 
+    # gets the sprite list ready
     sprites = []
 
     background.tile(2, 2, 0)
@@ -262,7 +259,7 @@ def main_menu_scene():
     verybottem_middle_of_tree = stage.Sprite(image_bank_4, 11, 97, 100)
     sprites.append(verybottem_middle_of_tree)
 
-    # gets the text ready 
+    # gets the text ready
     text = []
 
     text1 = stage.Text(width=50, height=30, font=None, palette=constants.CUSTOM_PALETTE, buffer=None)
@@ -279,7 +276,7 @@ def main_menu_scene():
     #   and set the frame rate to 60fps
     game = stage.Stage(ugame.display, 60)
 
-    # creates random stars to appear 
+    # creates random stars to appear
     stars = []
     while True:
         time.sleep(1.0)
@@ -313,7 +310,7 @@ def game_scene():
     sound = ugame.audio
     sound.stop()
     sound.mute(False)
-    
+
     # get image bank ready
     image_bank_1 = stage.Bank.from_bmp16("SPRITES.bmp")
     sprites = []
@@ -331,13 +328,13 @@ def game_scene():
     a_single_cloud = stage.Sprite(image_bank_1, 11, constants.OFF_SCREEN_X, constants.OFF_SCREEN_X)
     cloud.append(a_single_cloud)
 
-    
+
     def show_clouds():
         # create the particle cloud for when snakob moves
         a_single_cloud.move(snakob_bank.x + constants.SNAKOB_SPEED, snakob_bank.y)
         a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
-    # This creates snakob 
+    # This creates snakob
     snakob = []
     snakob_bank = stage.Sprite(image_bank_1, 13, int(constants.SCREEN_X / 2), constants.SCREEN_Y - constants.SPRITE_SIZE)
     snakob.append(snakob_bank) #
@@ -345,32 +342,32 @@ def game_scene():
     # This creates the swords for snakobs left and right
     swords = []
     swords_bank = stage.Sprite(image_bank_1, 8, int((constants.SCREEN_X / 2) + 14), ((constants.SCREEN_Y - 4) - constants.SPRITE_SIZE))
-    swords.append(swords_bank) 
+    swords.append(swords_bank)
     swords1_bank = stage.Sprite(image_bank_1, 9, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
-    swords.append(swords1_bank) 
+    swords.append(swords1_bank)
 
     # This creates the sparks for snakobs sword
     sparks = []
     spark_bank = stage.Sprite(image_bank_1, 10, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
-    sparks.append(spark_bank) 
+    sparks.append(spark_bank)
 
-    # Gets the score ready 
+    # Gets the score ready
     score = 0
     score_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
     score_text.clear()
     score_text.cursor(0, 0)
     score_text.move(1, 1)
     score_text.text("Score: {0}".format(score))
-    
-    # get the health bar ready 
-    health_hearts = 5
+
+    # get the health bar ready
+    health_hearts = 2
     health_text = stage.Text(width=29, height=14, font=None, palette=constants.SCORE_PALETTE, buffer=None)
     health_text.clear()
     health_text.cursor(0, 2)
     health_text.move(1, 2)
     health_text.text("Health: {0}".format(health_hearts))
 
-    # create the apple sprite 
+    # create the apple sprite
     apples = []
     apple_bank = stage.Sprite(image_bank_1, 12, int(constants.OFF_SCREEN_X), (constants.OFF_SCREEN_X - constants.SPRITE_SIZE))
     apples.append(apple_bank)
@@ -395,7 +392,7 @@ def game_scene():
             if boolean == 1:
                 tile_picked = 14
             background.tile(x_location, y_location, tile_picked)
-    
+
     # sets the snake counts to these
     snake_count = 1
     snake_counter = 1
@@ -443,7 +440,7 @@ def game_scene():
                                                          260))
                 break
 
-    # Gets the left snakes ready 
+    # Gets the left snakes ready
     left_snakes = []
     for left_snake_number in range(constants.SNAKE_CREATION_TOTAL):
         single_left_snake = stage.Sprite(image_bank_1, 4,
@@ -496,10 +493,10 @@ def game_scene():
         # get user input
         keys = ugame.buttons.get_pressed()
         #print(keys
-        
+
         # sets rock number to zero
         rock_number = 0
-        
+
         # chcecks if keys & ugame.K_X != 0: A button
         if keys & ugame.K_X != 0:  # A button
             if a_button == constants.button_state["button_up"]:
@@ -523,11 +520,11 @@ def game_scene():
             else:
                 b_button = constants.button_state["button_up"]
 
-        # IF one of the d pad is being pressed, move the prticles with snakob 
+        # IF one of the d pad is being pressed, move the prticles with snakob
         if keys & ugame.K_RIGHT != 0 or keys & ugame.K_LEFT != 0 or keys & ugame.K_DOWN != 0 or keys & ugame.K_UP != 0:
             a_single_cloud.move((snakob_bank.x - 3) + constants.SNAKOB_SPEED, (snakob_bank.y + 2))
 
-        # takes off cloud particles if none of the d pad is being pressed 
+        # takes off cloud particles if none of the d pad is being pressed
         if keys & ugame.K_RIGHT == 0 and keys & ugame.K_LEFT == 0 and keys & ugame.K_DOWN == 0 and keys & ugame.K_UP == 0:
             a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
@@ -584,7 +581,7 @@ def game_scene():
                 swords1_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
                 snakob_direction = "down"
 
-        # if the a button is pressed, move rocks across the screen 
+        # if the a button is pressed, move rocks across the screen
         if a_button == constants.button_state["button_just_pressed"]:
             for rock_number in range(len(rocks)):
                 if rock_number == 3:
@@ -601,7 +598,7 @@ def game_scene():
             elif swords_bank.x < 0:
                 spark_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
-        # makes the rocks move across the screen acoring to snakobs orientation 
+        # makes the rocks move across the screen acoring to snakobs orientation
         for rock_number in range(len(rocks)):
             if rocks[rock_number].x > 0 :
                 laser_direction = None
@@ -627,7 +624,7 @@ def game_scene():
         for counter in range(1, 61):
             if counter == 60:
                 timer = timer + 1
-                if timer == 500:
+                if timer == 300:
                     health()
                     timer = 0
                 else:
@@ -788,8 +785,8 @@ def game_scene():
                             # this will freeze the screen for a split second, but we have no option
                             game.render_block()
                             bottom_snake_number = bottom_snake_number + 1
-        
-        # this detects if snakob has collided with an apple 
+
+        # this detects if snakob has collided with an apple
         for ammo_number in range(len(apples)):
             if apples[ammo_number].x > 0:
                 if snakob_bank.x > 0:
@@ -805,8 +802,8 @@ def game_scene():
                         health_hearts = health_hearts + 1
                         sound.stop()
                         sound.play(health_sound)
-                        if health_hearts == 6:
-                            health_hearts = 5
+                        if health_hearts == 4:
+                            health_hearts = 3
                         health_text.clear()
                         health_text.cursor(0, 2)
                         health_text.move(1, 2)
@@ -828,7 +825,7 @@ def game_scene():
                     health_text.cursor(0, 2)
                     health_text.move(1, 2)
                     health_text.text("Health: {0}".format(health_hearts))
-                    
+
         # detects collision in snakes and snakob
         for bottom_snake_number in range(len(bottom_snakes)):
             if bottom_snakes[bottom_snake_number].x > 0:
@@ -880,8 +877,8 @@ def game_scene():
                     health_text.cursor(0, 2)
                     health_text.move(1, 2)
                     health_text.text("Health: {0}".format(health_hearts))
-        
-        # if the hearts are equal to zero, the game is over 
+
+        # if the hearts are equal to zero, the game is over
         if health_hearts == 0:
             game_over_scene(score)
 
