@@ -3,7 +3,7 @@ Image Banks and Sounds
 
 Before we can start coding a video game, we need to have the artwork and other assets. The stage library from CircuitPython we will be using is designed to import an "image bank". These image banks are 16 sprites staked on top of each other, each with a resolution of 16x16 pixels. This means the resulting image bank is 16x256 pixels in size. Also the image bank **must** be saved as a 16-color BMP file, with a pallet of 16 colors. To get a sprite image to show up on the screen, we will load an image bank into memory, select the image from the bank we want to use and then tell CircuitPython where we would like it placed on the screen. 
 
-.. figure:: https://raw.githubusercontent.com/jacob-bonner/ICS3U-2019-Group18/master/gamesprites.bmp
+.. figure:: https://github.com/cameron-teed/ICS3U-2019-Group20/blob/master/SPRITES.bmp
     :height: 256 px
     :align: center
     :alt: Image Bank for snakobs forest
