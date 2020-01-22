@@ -3,7 +3,7 @@
 MT Splash Scene
 ==============
 
-Asteroid Dodger has two studios to its name: it was made by Snakob Studios, and distributed by MT Game Studios. Each has a splash scene before the actual menu shows up. The MT Game Studios splash scene shows up first. The first thing you must do is establish an image bank for this scene. You must use the mt game studios image bank. Then set the background of the screen to be the first image in the image bank. In this case, the background will be plain white.
+Snakobs forest has two studios to its name: it was made by Snakob Studios, and distributed by MT Game Studios. Each has a splash scene before the actual menu shows up. The MT Game Studios splash scene shows up first. The first thing you must do is establish an image bank for this scene. You must use the mt game studios image bank. Then set the background of the screen to be the first image in the image bank. In this case, the background will be plain white.
 
 .. code-block:: python
   :linenos:
