@@ -10,6 +10,7 @@ import board
 import time
 import random
 import constants
+import neopixel
 
 
 def blank_white_reset_scene():
@@ -213,8 +214,10 @@ def game_splash_scene():
     while True:
         # get user input
         # update game logic
-        time.sleep(3.0)
+        time.sleep(4.0)
         # redraw sprite list
+        game.render_sprites(snakob)
+        game.tick()
         main_menu_scene()
 
 def main_menu_scene():
@@ -328,7 +331,6 @@ def game_scene():
     a_single_cloud = stage.Sprite(image_bank_1, 11, constants.OFF_SCREEN_X, constants.OFF_SCREEN_X)
     cloud.append(a_single_cloud)
 
-
     def show_clouds():
         # create the particle cloud for when snakob moves
         a_single_cloud.move(snakob_bank.x + constants.SNAKOB_SPEED, snakob_bank.y)
@@ -441,6 +443,7 @@ def game_scene():
                 break
 
     # Gets the left snakes ready
+
     left_snakes = []
     for left_snake_number in range(constants.SNAKE_CREATION_TOTAL):
         single_left_snake = stage.Sprite(image_bank_1, 4,
@@ -497,6 +500,7 @@ def game_scene():
         # sets rock number to zero
         rock_number = 0
 
+
         # chcecks if keys & ugame.K_X != 0: A button
         if keys & ugame.K_X != 0:  # A button
             if a_button == constants.button_state["button_up"]:
@@ -525,6 +529,7 @@ def game_scene():
             a_single_cloud.move((snakob_bank.x - 3) + constants.SNAKOB_SPEED, (snakob_bank.y + 2))
 
         # takes off cloud particles if none of the d pad is being pressed
+
         if keys & ugame.K_RIGHT == 0 and keys & ugame.K_LEFT == 0 and keys & ugame.K_DOWN == 0 and keys & ugame.K_UP == 0:
             a_single_cloud.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
@@ -582,6 +587,7 @@ def game_scene():
                 snakob_direction = "down"
 
         # if the a button is pressed, move rocks across the screen
+
         if a_button == constants.button_state["button_just_pressed"]:
             for rock_number in range(len(rocks)):
                 if rock_number == 3:
@@ -599,6 +605,7 @@ def game_scene():
                 spark_bank.move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
         # makes the rocks move across the screen acoring to snakobs orientation
+
         for rock_number in range(len(rocks)):
             if rocks[rock_number].x > 0 :
                 laser_direction = None
@@ -625,6 +632,7 @@ def game_scene():
             if counter == 60:
                 timer = timer + 1
                 if timer == 300:
+
                     health()
                     timer = 0
                 else:
@@ -835,6 +843,7 @@ def game_scene():
                                  bottom_snakes[bottom_snake_number].y + 15,
                                  snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
                     bottom_snakes[bottom_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+
                     sound.stop()
                     sound.play(crash_sound)
                     health_hearts = health_hearts - 1
@@ -853,6 +862,26 @@ def game_scene():
                                  right_snakes[right_snake_number].y + 15,
                                  snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
                     right_snakes[right_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    sound.stop()
+                    sound.play(crash_sound)
+                    health_hearts = health_hearts - 1
+                    health_text.clear()
+                    health_text.cursor(0, 2)
+                    health_text.move(1, 2)
+                    health_text.text("Health: {0}".format(health_hearts))
+
+
+
+        # This detects a collision between snakob and snakes going right
+        for right_snake_number in range(len(right_snakes)):
+            if right_snakes[right_snake_number].x > 0:
+                if stage.collide(right_snakes[right_snake_number].x + 1,
+                                 right_snakes[right_snake_number].y + 1,
+                                 right_snakes[right_snake_number].x + 15,
+                                 right_snakes[right_snake_number].y + 15,
+                                 snakob_bank.x + 3, snakob_bank.y + 3, snakob_bank.x + 12, snakob_bank.y + 12):
+                    right_snakes[right_snake_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+
                     sound.stop()
                     sound.play(crash_sound)
                     health_hearts = health_hearts - 1
