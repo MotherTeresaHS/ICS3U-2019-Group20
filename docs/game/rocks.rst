@@ -3,7 +3,7 @@
 Lasers
 ==========
 
-The next thing to get working is actually firing the lasers themselves. Like all the other sprites, they must first be created and added to a list. Make sure the list is both painted and rendered on screen. Similar to the asteroids, the lasers will be created and appended to a list with a for loop and will appear in purgatory off screen. 
+The next thing to get working is actually firing the rocks themselves. Like all the other sprites, they must first be created and added to a list. Make sure the list is both painted and rendered on screen. Similar to the asteroids, the lasers will be created and appended to a list with a for loop and will appear in purgatory off screen. 
 
 .. code-block:: python
   :linenos:
